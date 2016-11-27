@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">OCC Library 2</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Strings related to login -->
+    <string name="sign_in">Sign in</string>
+    <string name="student_id">Student ID:</string>
+    <string name="password">Password:</string>
+    <string name="enter_password">Enter password</string>
+    <string name="login_fail">Password or student ID is incorrect</string>
+    <string name="login_success">Log in success</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="login_button">Log in</string>
+    <string name="reset_button">Reset</string>
+    <string name="student_id_null">Student ID cannot be null</string>
+    <string name="password_null">Password cannot be null</string>
+
+    <!-- Main activity -->
+    <string name="student_profile">Student Profile</string>
+    <string name="reserve_room">Reserve Room</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="borrow_book">Borrow Book</string>
+    <string name="welcome">WELCOME TO OCC LIBRARY</string>
+    <string name="not_login">* You MUST login to use all library functions. <u>Click to login.</u></string>
+
+    <!-- Student Profile activity -->
+    <string name="student_information">Student Information</string>
+    <string name="student_activity">Student Activity</string>
+    <string name="id">ID:</string>
+    <string name="first_name">First name:</string>
+    <string name="last_name">Last name:</string>
+    <string name="no_show_times">No show times:</string>
+    <string name="room_reserving">Room reserving:</string>
+    <string name="book_borrowing">Book borrowing:</string>
+    <string name="old_password">Old password:</string>
+    <string name="new_password">New password:</string>
+    <string name="confirm_password">Confirm new password:</string>
+    <string name="change_password">Change password</string>
+
+    <string name="title_activity_login2">LoginActivity2</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_student_profile">StudentProfileActivity</string>
+</resources>
