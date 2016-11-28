@@ -18,6 +18,7 @@ import java.util.Arrays;
 
 /**
  * Created by Joseph on 11/23/2016.
+ * Added Room, RoomBooking and Book by Long on 11/27/2016
  */
 
 class DBHelper extends SQLiteOpenHelper {
@@ -25,11 +26,12 @@ class DBHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     static final String DATABASE_NAME = "OCCLibrary";
-    private static final String DATABASE_BOOK_TABLE = "Books";
-    private static final String DATABASE_ROOM_TABLE = "Rooms";
-    private static final String DATABASE_ROOMBOOKING_TABLE = "RoomBooking";
+    private static final String DATABASE_BOOK_TABLE = "Book";
+    private static final String DATABASE_ROOM_TABLE = "Room";
+    private static final String DATABASE_ROOM_BOOKING_TABLE = "RoomBooking";
     private static final String DATABASE_STUDENT_TABLE = "Student";
     private static final int DATABASE_VERSION = 1;
+
 
 
 
@@ -52,7 +54,7 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String ROOM_BOOKING_KEY_FIELD_ID = "room_booking_id";
     private static final String ROOM_BOOKING_FIELD_ROOM_ID = "room_id";
     private static final String ROOM_BOOKING_FIELD_STUDENT_ID = "student_id";
-    private static final String ROOM_BOOKING_FIELD_DATE = "date"; // location and list of support devices
+    private static final String ROOM_BOOKING_FIELD_DATE = "date";
     private static final String ROOM_BOOKING_FIELD_START_TIME = "start_time";
     private static final String ROOM_BOOKING_FIELD_HOURS_USED = "hours_used";
 
@@ -100,15 +102,17 @@ class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(table);
 
         //ROOM_BOOKING
-        table = "CREATE TABLE " + DATABASE_ROOMBOOKING_TABLE_TABLE + "("
+        table = "CREATE TABLE " + DATABASE_ROOM_BOOKING_TABLE + "("
                 + ROOM_BOOKING_KEY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ROOM_BOOKING_FIELD_ROOM_ID + " INTEGER, "
+                + ROOM_BOOKING_FIELD_STUDENT_ID + " INTEGER, "
+                + ROOM_BOOKING_FIELD_DATE + " TEXT, "
+                + ROOM_BOOKING_FIELD_START_TIME + " TEXT, "
+                + ROOM_BOOKING_FIELD_HOURS_USED + " INTEGER, "
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_ROOM_ID + ") REFERENCES "
                 + DATABASE_ROOM_TABLE + "(" + ROOM_KEY_FIELD_ID + "),"
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_STUDENT_ID + ") REFERENCES "
-                + DATABASE_STUDENT_TABLE + "(" + STUDENT_KEY_FIELD_ID + "),"
-                + ROOM_BOOKING_FIELD_DATE + " TEXT, "
-                + ROOM_BOOKING_FIELD_START_TIME + " TEXT, "
-                + ROOM_BOOKING_FIELD_HOURS_USED + " INTEGER" + ")";
+                + DATABASE_STUDENT_TABLE + "(" + STUDENT_KEY_FIELD_ID + ")"+ ")";
         sqLiteDatabase.execSQL (table);
 
     }
@@ -117,14 +121,47 @@ class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_BOOK_TABLE);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_ROOMBOOKING_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_ROOM_BOOKING_TABLE);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_ROOM_TABLE);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXIST " + DATABASE_STUDENT_TABLE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DATABASE_STUDENT_TABLE);
 
         onCreate(sqLiteDatabase);
     }
 
     // import data from csv file
+    // ROOM
+    public boolean importRoomsFromCSV(String csvFileName) {
+        AssetManager manager = mContext.getAssets();
+        InputStream inStream;
+        try {
+            inStream = manager.open(csvFileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line;
+        try {
+            while ((line = buffer.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length != 4) {
+                    Log.d("OCC Library", "Skipping Bad CSV Row: " + Arrays.toString(fields));
+                    continue;
+                }
+                int id = Integer.parseInt(fields[0].trim());
+                String name = fields[1].trim();
+                String description = fields[2].trim();
+                int capacity = Integer.parseInt(fields[3].trim());
+                addRoom(new Room(id, name, description, capacity));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    // STUDENT
     public boolean importStudentFromCSV(String csvFileName)
     {
         AssetManager am = mContext.getAssets();
@@ -163,8 +200,44 @@ class DBHelper extends SQLiteOpenHelper {
         }
         return true;
     }
+    // ROOM BOOKING
+    public boolean importRoomBookingsFromCSV(String csvFileName) {
+        AssetManager manager = mContext.getAssets();
+        InputStream inStream;
+        try {
+            inStream = manager.open(csvFileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
 
-    //********* STUDENT TABLE OPERATIONS: ADD, GET ALL, UPDATE, DELETE
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(inStream));
+        String line;
+        try {
+            while ((line = buffer.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length != 6) {
+                    Log.d("OCC Library", "Skipping Bad CSV Row: " + Arrays.toString(fields));
+                    continue;
+                }
+
+                int id = Integer.parseInt(fields[0].trim());
+                int roomId = Integer.parseInt(fields[1].trim());
+                int studentId = Integer.parseInt(fields[2].trim());
+                String date = fields[3].trim();
+                String startTime = fields[4].trim();
+                int hoursUsed = Integer.parseInt(fields[5].trim());
+                addRoomBooking(new RoomBooking(id, roomId, studentId, date, startTime, hoursUsed));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    // BOOK
+
+    //********* STUDENT TABLE OPERATIONS: ADD, GET, GET ALL, UPDATE, DELETE
 
     public void addStudent(Student student)
     {
@@ -212,10 +285,194 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //********** ROOM DATABASE OPERATIONS:  ADD, GETALL, EDIT, DELETE
+    public void addRoom(Room room) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(ROOM_KEY_FIELD_ID, room.getmId());
+        values.put(ROOM_FIELD_NAME, room.getmName());
+        values.put(ROOM_FIELD_DESCRIPTION, room.getmDescription());
+        values.put(ROOM_FIELD_CAPACITY, room.getmCapacity());
+
+        db.insert(DATABASE_ROOM_TABLE, null, values);
+
+        // CLOSE THE DATABASE CONNECTION
+        db.close();
+    }
+
+    public ArrayList<Room> getAllRooms() {
+        ArrayList<Room> roomsList = new ArrayList<>();
+        SQLiteDatabase database = this.getReadableDatabase();
+
+        Cursor cursor = database.query(DATABASE_ROOM_TABLE, null, null, null, null, null, null);
+
+        //COLLECT EACH ROW IN THE TABLE
+        if (cursor.moveToFirst()) {
+            do {
+                Room room =
+                        new Room(cursor.getInt(0),
+                                cursor.getString(1),
+                                cursor.getString(2),
+                                cursor.getInt(3));
+                roomsList.add(room);
+            } while (cursor.moveToNext());
+        }
+        return roomsList;
+    }
+
+    public void deleteRoom(Room room) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // DELETE THE TABLE ROW
+        db.delete(DATABASE_ROOM_TABLE, ROOM_KEY_FIELD_ID + " = ?",
+                new String[]{String.valueOf(room.getmId())});
+        db.close();
+    }
+
+    public void deleteAllRooms() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(DATABASE_ROOM_TABLE, null, null);
+        db.close();
+    }
+
+    public void updateRoom(Room room) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(ROOM_FIELD_NAME, room.getmName());
+        values.put(ROOM_FIELD_DESCRIPTION, room.getmDescription());
+        values.put(ROOM_FIELD_CAPACITY, room.getmCapacity());
+
+        db.update(DATABASE_ROOM_TABLE, values, ROOM_KEY_FIELD_ID + " = ?",
+                new String[]{String.valueOf(room.getmId())});
+        db.close();
+    }
+
+    public Room getRoom(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                DATABASE_ROOM_TABLE,
+                new String[]{ROOM_KEY_FIELD_ID, ROOM_FIELD_NAME, ROOM_FIELD_DESCRIPTION, ROOM_FIELD_CAPACITY},
+                ROOM_KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(id)},
+                null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Room room = new Room(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getInt(3));
+
+        db.close();
+        return room;
+    }
+
+    //********** ROOM BOOKING DATABASE OPERATIONS:  ADD, GETALL, EDIT, DELETE
+    public void addRoomBooking(RoomBooking roomBooking) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(ROOM_BOOKING_KEY_FIELD_ID, roomBooking.getmId());
+        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getmRoomId());
+        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getmStudentId());
+        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getmDate());
+        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getmStartTime());
+        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getmHoursUsed());
+
+        db.insert(DATABASE_ROOM_BOOKING_TABLE, null, values);
+
+        // CLOSE THE DATABASE CONNECTION
+        db.close();
+    }
+
+    public ArrayList<RoomBooking> getAllRoomBookings() {
+
+        ArrayList<RoomBooking> roomBookingsList = new ArrayList<>();
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.query(DATABASE_ROOM_BOOKING_TABLE,
+                null,
+                null,
+                null, null, null, null);
+
+        //COLLECT EACH ROW IN THE TABLE
+        if (cursor.moveToFirst()) {
+            do {
+                RoomBooking roomBooking =
+                        new RoomBooking(cursor.getInt(0),
+                                cursor.getInt(1),
+                                cursor.getInt(2),
+                                cursor.getString(3),
+                                cursor.getString(4),
+                                cursor.getInt(5)      );
+                roomBookingsList.add(roomBooking);
+            } while (cursor.moveToNext());
+        }
+        return roomBookingsList;
+    }
+
+    public void deleteRoomBooking(RoomBooking roomBooking) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // DELETE THE TABLE ROW
+        db.delete(DATABASE_ROOM_BOOKING_TABLE, ROOM_BOOKING_KEY_FIELD_ID + " = ?",
+                new String[]{String.valueOf(roomBooking.getmId())});
+        db.close();
+    }
+
+    public void deleteAllRoomBookings() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(DATABASE_ROOM_BOOKING_TABLE, null, null);
+        db.close();
+    }
+
+    public void updateRoomBooking(RoomBooking roomBooking) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getmRoomId());
+        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getmStudentId());
+        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getmDate());
+        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getmStartTime());
+        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getmHoursUsed());
+
+        db.update(DATABASE_ROOM_BOOKING_TABLE, values, ROOM_BOOKING_KEY_FIELD_ID + " = ?",
+                new String[]{String.valueOf(roomBooking.getmId())});
+        db.close();
+    }
+
+    public RoomBooking getRoomBooking(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                DATABASE_ROOM_BOOKING_TABLE,
+                new String[]{ROOM_BOOKING_KEY_FIELD_ID, ROOM_BOOKING_FIELD_ROOM_ID, ROOM_BOOKING_FIELD_STUDENT_ID,
+                        ROOM_BOOKING_FIELD_DATE, ROOM_BOOKING_FIELD_START_TIME, ROOM_BOOKING_FIELD_HOURS_USED},
+                ROOM_BOOKING_KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(id)},
+                null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        RoomBooking roomBooking = new RoomBooking(
+                cursor.getInt(0),
+                cursor.getInt(1),
+                cursor.getInt(2),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getInt(5));
+
+        db.close();
+        return roomBooking;
+    }
+
 
     //********** BOOK DATABASE OPERATIONS:  ADD, GETALL, EDIT, DELETE
 
-    public void addBook(Book book) {
+    /*public void addBook(Book book) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -320,5 +577,5 @@ class DBHelper extends SQLiteOpenHelper {
 
         db.close();
         return book;
-    }
+    }*/
 }

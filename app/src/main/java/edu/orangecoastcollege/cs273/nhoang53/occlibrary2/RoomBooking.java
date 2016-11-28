@@ -5,17 +5,11 @@ package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
  */
 
 public class RoomBooking {
-   /* private static final String ROOM_BOOKING_KEY_FIELD_ID = "room_booking_id";
-    private static final String ROOM_BOOKING_FIELD_ROOM_ID = "room_id";
-    private static final String ROOM_BOOKING_FIELD_STUDENT_ID = "student_id";
-    private static final String ROOM_BOOKING_FIELD_DATE = "date"; // location and list of support devices
-    private static final String ROOM_BOOKING_FIELD_START_TIME = "start_time";
-    private static final String ROOM_BOOKING_FIELD_HOURS_USED = "hours_used";*/
 
     private int mId;
     private int mRoomId;
     private int mStudentId;
-    private String mDate;
+    private String mDate; // mmddyyyy
     private String mStartTime;
     private int mHoursUsed;
 

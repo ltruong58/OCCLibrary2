@@ -21,8 +21,10 @@
             android:name=".LoginActivity"
             android:label="@string/sign_in"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".StudentProfileActivity"
-            android:label="@string/student_profile"></activity>
+        <activity
+            android:name=".StudentProfileActivity"
+            android:label="@string/student_profile" />
+        <activity android:name=".PickDateActivity"></activity>
     </application>
 
 </manifest>

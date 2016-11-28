@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void reserveRoom(View view)
+    {
+        Intent intent = new Intent(this, PickDateActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onStop() {
         /*editor.remove("studentId");

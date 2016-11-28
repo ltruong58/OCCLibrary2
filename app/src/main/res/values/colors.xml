@@ -7,4 +7,7 @@
     <color name="colorLoginSuccess">#2e7d32</color>
     <color name="colorLoginFail">#F44336</color>
     <color name="colorType">#01579b</color>
+    <color name="colorFull">#cc0000</color>
+    <color name="colorAvailable">#ffbb33</color>
+    <color name="colorEmpty">#99cc00</color>
 </resources>

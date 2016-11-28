@@ -37,6 +37,10 @@
     <string name="confirm_password">Confirm new password:</string>
     <string name="change_password">Change password</string>
 
+    <!-- pick date activity -->
+    <string name="pick_date_title">Please pick a valid date</string>
+
+
     <string name="title_activity_login2">LoginActivity2</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_student_profile">StudentProfileActivity</string>

@@ -49,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
         db.importStudentFromCSV("students.csv");
+
+
         allStudentList = db.getAllStudents();
         Log.i("\nOCC Library.", allStudentList.toString());
 
