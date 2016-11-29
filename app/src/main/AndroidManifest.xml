@@ -24,7 +24,9 @@
         <activity
             android:name=".StudentProfileActivity"
             android:label="@string/student_profile" />
-        <activity android:name=".PickDateActivity"></activity>
+        <activity android:name=".PickDateActivity" />
+        <activity android:name=".PickRoomActivity" />
+        <activity android:name=".PickBookingTimeActivity"></activity>
     </application>
 
 </manifest>

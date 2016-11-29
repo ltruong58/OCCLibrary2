@@ -39,6 +39,10 @@
 
     <!-- pick date activity -->
     <string name="pick_date_title">Please pick a valid date</string>
+    <string name="dates_range">%1$s to %2$s</string>
+
+    <!-- pick room activity -->
+    <string name="room_capacity">Capacity: %1$d</string>
 
 
     <string name="title_activity_login2">LoginActivity2</string>

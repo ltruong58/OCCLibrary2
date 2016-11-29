@@ -1,12 +1,13 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,12 +17,12 @@ import java.util.List;
 
 public class PickDateActivity extends AppCompatActivity {
 
-    private static final int FULL = 0; // no time period available to book
+    private static final int FULL_OR_WEEKEND_DAYS = 0; // no time period available to book
     private static final int AVAILABLE = 1; // still available in some periods.
     private static final int EMPTY = 2; // no booking on this day
     private static final String LIBRARY_OPENING_TIME = "700am";
     private static final String LIBRARY_CLOSING_TIME = "800pm";
-    private static final int LIBRARY_TOTAL_HOURS_OPEN = 13;
+    private static final int LIBRARY_TOTAL_HOURS_OPEN = 13; // Is used to check room/ date is full booked
     private static final int IS_1_TO_10 = 0;
     private static final int IS_11_TO_20 = 1;
     private static final int IS_21_TO_30 = 2;
@@ -37,6 +38,7 @@ public class PickDateActivity extends AppCompatActivity {
     private ImageButton nextButton;
     private ImageButton previousButton;
     private ArrayList<Calendar> calendarsList;
+    private TextView datesRangeTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,25 +58,41 @@ public class PickDateActivity extends AppCompatActivity {
         datesLayout = (GridLayout) findViewById(R.id.datesGridLayout);
         nextButton = (ImageButton) findViewById(R.id.nextButton);
         previousButton = (ImageButton) findViewById(R.id.previousButton);
+        datesRangeTextView = (TextView) findViewById(R.id.dateRangeTextView);
 
         //previousButton.setEnabled(false);
         previousButton.setVisibility(View.INVISIBLE);
 
         // get current date
         calendarsList = new ArrayList<>();
+
+        //test
+        Calendar calendar = Calendar.getInstance();
+
         for(int i = 0; i < 30; i++)
         {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, i);
-            calendarsList.add(calendar);
-
+            Calendar nCalendar = Calendar.getInstance();
+            nCalendar.add(Calendar.DATE, i);
+            calendarsList.add(nCalendar);
         }
 
+        datesRangeTextView.setText(String.valueOf(calendar.getTimeInMillis()));
+        //datesRangeTextView.setText(getString(R.string.dates_range,getDateStringDisplay(calendarsList.get(0)),getDateStringDisplay(calendarsList.get(calendarsList.size() - 1))));
         // load 1st 10 of 30 days ahead from current date
         showDateOnTable( datesRange, calendarsList);
 
     }
 
+    private String getDateStringDisplay(Calendar calendar)
+    {
+        int curMonth = calendar.get(Calendar.MONTH) + 1; // need +1
+        int curDate = calendar.get(Calendar.DATE);
+        int curYear = calendar.get(Calendar.YEAR);
+        String date = String.valueOf(curMonth) + "/"
+                + String.valueOf(curDate) + "/"
+                +String.valueOf(curYear);
+        return date;
+    }
     private void showDateOnTable(int range, ArrayList<Calendar> calendarsList)
     {
 
@@ -86,8 +104,12 @@ public class PickDateActivity extends AppCompatActivity {
             if (childView instanceof LinearLayout) // check if that cell is a LinearLayout
             {
                 LinearLayout childLinearLayout = (LinearLayout) childView;
-                // Apply Drag listener
-                //childLinearLayout.setOnDragListener(new CoderDragListener());
+                childLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewRoomOfSelectedDate(view);
+                    }
+                });
 
                 View grandchildView1 = childLinearLayout.getChildAt(0);
                 View grandchildView2 = childLinearLayout.getChildAt(1);
@@ -98,6 +120,8 @@ public class PickDateActivity extends AppCompatActivity {
                     Calendar mCalendar = calendarsList.get(range * 10 + i);
 
                     int currentDayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
+
+                    //
                     int curMonth = mCalendar.get(Calendar.MONTH) + 1; // need +1
                     int curDate = mCalendar.get(Calendar.DATE);
                     int curYear = mCalendar.get(Calendar.YEAR);
@@ -105,51 +129,58 @@ public class PickDateActivity extends AppCompatActivity {
                             + String.valueOf(curDate)
                             +String.valueOf(curYear);
 
+
                     String currentDayString = "";
                     switch (currentDayOfWeek) {
                         case Calendar.SUNDAY:
                             // Current day is Sunday = 1
-                            currentDayString = "Sunday";
+                            currentDayString = "SUN";
                             break;
                         case Calendar.MONDAY:
                             // Current day is Monday
-                            currentDayString = "Monday";
+                            currentDayString = "MON";
                             break;
                         case Calendar.TUESDAY:
                             // etc.
-                            currentDayString = "Tuesday";
+                            currentDayString = "TUE";
                             break;
                         case Calendar.WEDNESDAY:
                             // etc.
-                            currentDayString = "Wednesday";
+                            currentDayString = "WED";
                             break;
                         case Calendar.THURSDAY:
                             // etc.
-                            currentDayString = "Thursday";
+                            currentDayString = "THUR";
                             break;
                         case Calendar.FRIDAY:
                             // etc.
-                            currentDayString = "Friday";
+                            currentDayString = "FRI";
                             break;
                         case Calendar.SATURDAY:
                             // = 7
-                            currentDayString = "Saturday";
+                            currentDayString = "SAT";
                             break;
                         default:
 
                     }
 
+
                     childDayOfWeekTextView.setText(currentDayString);
                     childDateTextView.setText(curMonth + "/" + curDate);
-                    updateBackGroundColor(childLinearLayout, getDateStatus(date));
 
-                    //TODO:  Add the CoderTouchListener to every ImageView within each LinearLayout
-                    //childImageView.setOnTouchListener(new CoderTouchListener());
+                    if((currentDayString == "SUN") || (currentDayString == "SAT"))
+                        updateBackGroundColor(childLinearLayout, FULL_OR_WEEKEND_DAYS);
+                    else
+                        updateBackGroundColor(childLinearLayout, getDateStatus(date));
+
+                    childLinearLayout.setTag(date);
                 }
 
             }
         }
     }
+
+
     private int getDateStatus(String date)
     {
         ArrayList<RoomBooking> newList =  new ArrayList<>();
@@ -186,63 +217,88 @@ public class PickDateActivity extends AppCompatActivity {
             }
             else
             {
-                return FULL;
+                return FULL_OR_WEEKEND_DAYS;
             }
         }
         else
             return EMPTY;
     }
 
-    private void updateBackGroundColor(LinearLayout linearLayout, int status)
+    public void updateBackGroundColor(LinearLayout linearLayout, int status)
     {
+        Drawable background = ContextCompat.getDrawable(this, R.drawable.empty_background);
         switch (status)
         {
             case EMPTY:
-                linearLayout.setBackgroundColor(getResources().getColor(R.color.colorEmpty));
+
                 break;
             case AVAILABLE:
-                linearLayout.setBackgroundColor(getResources().getColor(R.color.colorAvailable));
+                background = ContextCompat.getDrawable(this, R.drawable.available_background);
                 break;
-            case FULL:
-                linearLayout.setBackgroundColor(getResources().getColor(R.color.colorFull));
+            case FULL_OR_WEEKEND_DAYS:
+                background = ContextCompat.getDrawable(this, R.drawable.full_background);
                 break;
+            default:
         }
+        linearLayout.setBackground(background);
     }
 
     public void loadNext10Dates(View view)
     {
-        datesRange++;
-        showDateOnTable(datesRange, calendarsList);
-        if(datesRange == IS_11_TO_20)
+        if(view instanceof ImageButton)
         {
-            //previousButton.setEnabled(true);
-            previousButton.setVisibility(View.VISIBLE);
+            datesRange++;
+            showDateOnTable(datesRange, calendarsList);
+            if(datesRange == IS_11_TO_20)
+            {
+                //previousButton.setEnabled(true);
+                previousButton.setVisibility(View.VISIBLE);
+            }
+
+            if(datesRange == IS_21_TO_30)
+            {
+                //nextButton.setEnabled(false);
+                nextButton.setVisibility(View.INVISIBLE);
+            }
         }
 
-        if(datesRange == IS_21_TO_30)
-        {
-            //nextButton.setEnabled(false);
-            nextButton.setVisibility(View.INVISIBLE);
-        }
 
     }
 
     public void loadPrevious10Dates(View view)
     {
-        datesRange--;
-        showDateOnTable(datesRange, calendarsList);
-        if(datesRange == IS_11_TO_20)
+        if(view instanceof ImageButton)
         {
-            //nextButton.setEnabled(true);
-            nextButton.setVisibility(View.VISIBLE);
+            datesRange--;
+            showDateOnTable(datesRange, calendarsList);
+            if(datesRange == IS_11_TO_20)
+            {
+                //nextButton.setEnabled(true);
+                nextButton.setVisibility(View.VISIBLE);
+            }
+
+            if(datesRange == IS_1_TO_10)
+            {
+                //previousButton.setEnabled(false);
+                previousButton.setVisibility(View.INVISIBLE);
+            }
         }
 
-        if(datesRange == IS_1_TO_10)
-        {
-            //previousButton.setEnabled(false);
-            previousButton.setVisibility(View.INVISIBLE);
-        }
 
+    }
+
+    public void viewRoomOfSelectedDate(View view)
+    {
+        if(view instanceof LinearLayout)
+        {
+            LinearLayout selectedLinearLayout = (LinearLayout) view;
+            String selectedDate = (String) selectedLinearLayout.getTag();
+
+            Intent pickRoomIntent = new Intent(this, PickRoomActivity.class);
+
+            pickRoomIntent.putExtra("Date", selectedDate);
+            startActivity(pickRoomIntent);
+        }
     }
 
 

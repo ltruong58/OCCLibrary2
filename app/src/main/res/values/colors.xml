@@ -10,4 +10,5 @@
     <color name="colorFull">#cc0000</color>
     <color name="colorAvailable">#ffbb33</color>
     <color name="colorEmpty">#99cc00</color>
+    <color name="colorTransparent">#000000</color>
 </resources>
