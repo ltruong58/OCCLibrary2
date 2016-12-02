@@ -128,7 +128,7 @@ class DBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    // import data from csv file
+    //******* import data from csv file ********
     // ROOM
     public boolean importRoomsFromCSV(String csvFileName) {
         AssetManager manager = mContext.getAssets();
@@ -237,7 +237,7 @@ class DBHelper extends SQLiteOpenHelper {
     }
     // BOOK
 
-    //********* STUDENT TABLE OPERATIONS: ADD, GET, GET ALL, UPDATE, DELETE
+    //********* STUDENT TABLE OPERATIONS: ADD, GET 1, GET ALL, UPDATE, DELETE **********
 
     public void addStudent(Student student)
     {
@@ -283,6 +283,47 @@ class DBHelper extends SQLiteOpenHelper {
         db.update(DATABASE_STUDENT_TABLE, values, STUDENT_KEY_FIELD_ID + " =?",
                 new String[] {String.valueOf(student.getId())});
         db.close();
+    }
+
+    public Student getStudent(int studentId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(DATABASE_STUDENT_TABLE, null, STUDENT_KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(studentId)}, null, null, null);
+        if(cursor != null)
+        {
+            cursor.moveToFirst();
+        }
+
+        Student student = new Student(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getInt(4));
+
+       /* Student student = null;
+        if (cursor.moveToFirst()) {
+            do {
+                student = new Student(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getInt(4));
+            } while (cursor.moveToNext());
+        }*/
+
+
+        db.close();
+        return student;
+    }
+
+    public void changePassword(int studentId, String newPassword)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(STUDENT_KEY_FIELD_PASSWORD, newPassword);
+
+        db.update(DATABASE_STUDENT_TABLE, values, STUDENT_KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(studentId)});
     }
 
     //********** ROOM DATABASE OPERATIONS:  ADD, GETALL, EDIT, DELETE
@@ -358,14 +399,23 @@ class DBHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)},
                 null, null, null, null);
 
-        if (cursor != null)
+        /*if (cursor != null)
             cursor.moveToFirst();
 
         Room room = new Room(
                 cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2),
-                cursor.getInt(3));
+                cursor.getInt(3));*/
+        Room room = null;
+        if (cursor.moveToFirst()) {
+            do {
+                room = new Room(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getInt(3));
+            } while (cursor.moveToNext());
+        }
 
         db.close();
         return room;

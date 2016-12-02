@@ -35,7 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //public static final String STUDENT_PREFS = "studentPrefs";
     private SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editor;
+
+    private SharedPreferences splashPrefs;
+    private SharedPreferences.Editor editorSplash;
 
 
     @Override
@@ -49,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
         db.importStudentFromCSV("students.csv");
-
-
         allStudentList = db.getAllStudents();
         Log.i("\nOCC Library.", allStudentList.toString());
 
@@ -68,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         // prefs
         //prefs = getSharedPreferences(STUDENT_PREFS, 0);
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);
+
         if(prefs.getInt("studentId", 0) != 0)
         {
             //go to main page
@@ -113,11 +115,17 @@ public class LoginActivity extends AppCompatActivity {
                     //store data in SharedPreference
                     editor = prefs.edit(); // edit
                     editor.putInt("studentId",allStudentList.get(i).getId());
-                    editor.putString("lastName", allStudentList.get(i).getLastName());
+                    /*editor.putString("lastName", allStudentList.get(i).getLastName());
                     editor.putString("firstName", allStudentList.get(i).getFirstName());
                     editor.putString("password", allStudentList.get(i).getPassword());
-                    editor.putInt("noShowTimes", allStudentList.get(i).getNoShowTimes());
+                    editor.putInt("noShowTimes", allStudentList.get(i).getNoShowTimes());*/
                     editor.apply();
+
+                    // prevent it go to welcome splash page
+                    splashPrefs = getSharedPreferences(MainActivity.SPLASH_PREF, 0);
+                    editorSplash = splashPrefs.edit();
+                    editorSplash.putInt("splash", 1); // stop welcome splash page
+                    editorSplash.apply();
 
                     //go to main page
                     Intent intent = new Intent(this, MainActivity.class);
@@ -166,11 +174,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         Log.i("OCC Library. id:", String.valueOf(prefs.getInt("studentId", 0)));
-        Log.i("OCC Library. LastName:", prefs.getString("lastName", null));
+        /*Log.i("OCC Library. LastName:", prefs.getString("lastName", null));
         Log.i("OCC Library. FistName:", prefs.getString("firstName", null));
         Log.i("OCC Library. Password:", prefs.getString("password", null));
         Log.i("OCC Library. noShow:", String.valueOf(prefs.getInt("noShowTimes", 0)));
-
+*/
         /*editor.clear();
         editor.commit();*/
 

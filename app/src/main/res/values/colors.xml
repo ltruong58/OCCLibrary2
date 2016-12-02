@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorLogin">#4fc3f7</color>
     <color name="colorLoginSuccess">#2e7d32</color>
-    <color name="colorLoginFail">#F44336</color>
+    <color name="colorLoginFail">#f44336</color>
     <color name="colorType">#01579b</color>
     <color name="colorFull">#cc0000</color>
     <color name="colorAvailable">#ffbb33</color>

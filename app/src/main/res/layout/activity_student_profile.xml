@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.StudentProfileActivity"
     android:orientation="vertical"
-    android:background="@android:color/background_light">
+    android:background="@android:color/background_light"
+    android:weightSum="10">
 
     <LinearLayout
         android:orientation="vertical"
@@ -290,25 +291,59 @@
             android:layout_marginEnd="13dp" />
 
         <Button
+            android:text="Reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/resetButton"
+            android:onClick="reset"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/savePasswordButton"
+            android:layout_toStartOf="@+id/savePasswordButton"
+            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp" />
+
+        <Button
             android:text="Save change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/savePasswordButton"
-            android:layout_alignBaseline="@+id/resetButton"
-            android:layout_alignBottom="@+id/resetButton"
+            android:layout_alignParentBottom="true"
             android:layout_alignLeft="@+id/confirmPasswordEditText"
-            android:layout_alignStart="@+id/confirmPasswordEditText" />
+            android:layout_alignStart="@+id/confirmPasswordEditText"
+            android:onClick="changePassword" />
 
-        <Button
-            android:text="Reset"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="33dp"
-            android:id="@+id/resetButton"
             android:layout_below="@+id/textView30"
-            android:layout_alignRight="@+id/textView30"
-            android:layout_alignEnd="@+id/textView30"
-            android:onClick="reset" />
+            android:layout_alignLeft="@+id/resetButton"
+            android:layout_alignStart="@+id/resetButton"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="34dp"
+            android:id="@+id/alertTextView"
+            android:textColor="@color/colorLoginFail"
+            android:textSize="14sp"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView5"
+            android:layout_toRightOf="@+id/textView29"
+            android:layout_toEndOf="@+id/textView29"
+            android:id="@+id/oldPasswordWrongTextView"
+            android:textColor="@color/colorLoginFail" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView29"
+            android:layout_toStartOf="@+id/newPasswordEditText"
+            android:id="@+id/confirmPasswordWrongTextView"
+            android:layout_alignRight="@+id/resetButton"
+            android:layout_alignEnd="@+id/resetButton"
+            android:textColor="@color/colorLoginFail" />
 
     </RelativeLayout>
 

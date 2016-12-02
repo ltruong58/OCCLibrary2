@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StudentProfileActivity extends AppCompatActivity {
 
@@ -18,6 +19,10 @@ public class StudentProfileActivity extends AppCompatActivity {
     private TextView noShowTimesTextView;
     private TextView roomReservingTextView;
     private TextView bookBorrowTextView;
+    private TextView alertTextView;
+    private TextView oldPasswordWrongTextView;
+    private TextView confirmPasswordWrongTextView;
+
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
     private EditText confrimPasswordEditText;
@@ -27,6 +32,9 @@ public class StudentProfileActivity extends AppCompatActivity {
     private Button savePasswordButton;
 
     private SharedPreferences prefs;
+    private DBHelper db;
+    private Student student;
+    private Room room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,9 @@ public class StudentProfileActivity extends AppCompatActivity {
         noShowTimesTextView = (TextView) findViewById(R.id.noShowTimesTextView);
         roomReservingTextView = (TextView) findViewById(R.id.roomReservingTextView);
         bookBorrowTextView = (TextView) findViewById(R.id.bookBorrowTextView);
+        alertTextView = (TextView) findViewById(R.id.alertTextView);
+        oldPasswordWrongTextView = (TextView) findViewById(R.id.oldPasswordWrongTextView);
+        confirmPasswordWrongTextView = (TextView) findViewById(R.id.confirmPasswordWrongTextView);
 
         oldPasswordEditText = (EditText) findViewById(R.id.oldPasswordEditText);
         newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
@@ -52,14 +63,21 @@ public class StudentProfileActivity extends AppCompatActivity {
         resetButton = (Button) findViewById(R.id.resetButton);
         savePasswordButton = (Button) findViewById(R.id.savePasswordButton);
 
+        db = new DBHelper(this);
+        // get student information
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);
-        idTextView.setText(String.valueOf(prefs.getInt("studentId", 0)));
-        lastNameTextView.setText(prefs.getString("lastName", null));
-        firstNameTextView.setText(prefs.getString("firstName", null));
-        noShowTimesTextView.setText(String.valueOf(prefs.getInt("noShowTimes", 0)));
+        int studentId = prefs.getInt("studentId", 0);
 
+        student = db.getStudent(studentId);
 
+        idTextView.setText(String.valueOf(student.getId()));
+        lastNameTextView.setText(student.getLastName());
+        firstNameTextView.setText(student.getFirstName());
+        noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
 
+        // get room name
+        /*room = db.getRoom(studentId);
+        roomReservingTextView.setText(room.getmName());*/
     }
 
     public void reset (View view)
@@ -67,5 +85,32 @@ public class StudentProfileActivity extends AppCompatActivity {
         oldPasswordEditText.setText("");
         newPasswordEditText.setText("");
         confrimPasswordEditText.setText("");
+    }
+
+    public void changePassword(View view)
+    {
+        if(student.getPassword().equals(oldPasswordEditText.getText().toString()))
+        {
+            if(newPasswordEditText.getText().toString().equals(confrimPasswordEditText.getText().toString()))
+            {
+                db.changePassword(Integer.parseInt(idTextView.getText().toString()),
+                        newPasswordEditText.getText().toString());
+                startActivity(getIntent()); // restart activity
+                finish();
+                Toast.makeText(this, "Password changed", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                alertTextView.setText(R.string.password_not_match);
+                confirmPasswordWrongTextView.setText("*");
+                Toast.makeText(this, "new password do not match", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
+            alertTextView.setText(R.string.password_wrong);
+            oldPasswordWrongTextView.setText("*");
+            Toast.makeText(this, "Old password do not match", Toast.LENGTH_SHORT).show();
+        }
     }
 }

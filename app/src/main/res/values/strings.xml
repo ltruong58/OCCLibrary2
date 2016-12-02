@@ -2,6 +2,11 @@
     <string name="app_name">OCC Library 2</string>
     <string name="action_settings">Settings</string>
 
+    <string name="title_activity_login2">LoginActivity2</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_student_profile">StudentProfileActivity</string>
+    <string name="title_activity_settings">Settings</string>
+
     <!-- Strings related to login -->
     <string name="sign_in">Sign in</string>
     <string name="student_id">Student ID:</string>
@@ -36,12 +41,20 @@
     <string name="new_password">New password:</string>
     <string name="confirm_password">Confirm new password:</string>
     <string name="change_password">Change password</string>
+    <string name="password_not_match">* Confirm password do not match</string>
+    <string name="password_wrong">* Old password was wrong</string>
+
+
+    <!-- Strings related to Settings -->
+    <string name="welcome_screen">Welcome screen</string>
+    <string name="welcome_screen_description">Turn on or off welcome screen</string>
+    <string name="logout">Log out</string>
+
+    <!-- Splash screen -->
+    <string name="splash">Good place to study</string>
+    <string name="welcome_occ_library">Welcome to OCC library</string>
 
     <!-- pick date activity -->
     <string name="pick_date_title">Please pick a valid date</string>
 
-
-    <string name="title_activity_login2">LoginActivity2</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_student_profile">StudentProfileActivity</string>
 </resources>

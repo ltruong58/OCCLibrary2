@@ -25,6 +25,8 @@
             android:name=".StudentProfileActivity"
             android:label="@string/student_profile" />
         <activity android:name=".PickDateActivity"></activity>
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>
