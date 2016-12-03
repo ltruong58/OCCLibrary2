@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             //go to main page
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -129,10 +130,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     //go to main page
                     Intent intent = new Intent(this, MainActivity.class);
+                    finish();
                     startActivity(intent);
 
-                    i = allStudentList.size(); // stop the loop
-                    finish(); // finish activity
+                    //i = allStudentList.size(); // stop the loop
 
                 } else {
                     mLogInStatusTextView.setText(R.string.login_fail);

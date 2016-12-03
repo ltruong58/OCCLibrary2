@@ -1,9 +1,13 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     //private Student student;
 
     private TextView mNotLoginTextView;
-
+    int id;
 
 
     @Override
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         // Restore preferences
         studentSharedPrefs = getSharedPreferences(STUDENT_PREFS, 0);
         editorStudent = studentSharedPrefs.edit();
-        int id = studentSharedPrefs.getInt("studentId", 0); // if not, id = 0
+        id = studentSharedPrefs.getInt("studentId", 0); // if not, id = 0
 
         /*Log.i("\nOCC Library. id:", String.valueOf(id));
         ///Log.i("\nOCC Library. id:", String.valueOf(prefs.getInt("studentId", 0)));
@@ -101,13 +105,22 @@ public class MainActivity extends AppCompatActivity {
     public void login(View view)
     {
         Intent intent = new Intent(this, LoginActivity.class);
+        finish();
         startActivity(intent);
     }
 
     public void studentProfile(View view)
     {
-        Intent intent = new Intent(this, StudentProfileActivity.class);
-        startActivity(intent);
+        if(id == 0)
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            finish();
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(this, StudentProfileActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -161,6 +174,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
     }
 
+    // to change value in Menu item
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(id == 0)
+        {
+            menu.findItem(R.id.action_log).setTitle(R.string.login);
+        }
+        else
+            menu.findItem(R.id.action_log).setTitle(R.string.logout);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -170,18 +195,25 @@ public class MainActivity extends AppCompatActivity {
                 Intent settingIntent = new Intent(this, SettingActivity.class);
                 startActivity(settingIntent);
                 return true;
-            case R.id.action_logout:
-                editorStudent.clear();
-                editorStudent.apply();
+            case R.id.action_log:
+                if(id != 0) {
+                    editorStudent.clear();
+                    editorStudent.apply();
 
-                editorSplash.putInt("splash", 1); // put it 1, so it will not splash
-                editorSplash.apply();
+                    editorSplash.putInt("splash", 1); // put it 1, so it will not splash
+                    editorSplash.apply();
 
-                Toast.makeText(this, "You successfully logout", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You successfully logout", Toast.LENGTH_SHORT).show();
 
-                startActivity(getIntent()); // refresh itself
-                this.finish();
-                return true;
+                    this.finish();
+                    startActivity(getIntent()); // refresh itself
+                    return true;
+                }
+                else{
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    finish();
+                    startActivity(intent);
+                }
         }
 
         return super.onOptionsItemSelected(item);
@@ -220,6 +252,25 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, ContactActivity.class);
         startActivity(intent);
+    }
+
+    // Up coming activity
+    public void borrowBook(View view)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This function comming soon");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        /*AlertDialog alert = builder.create();
+        alert.show();*/
+        builder.show();
     }
 
     /**

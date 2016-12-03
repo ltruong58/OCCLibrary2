@@ -48,6 +48,7 @@
     <!-- Strings related to Settings -->
     <string name="welcome_screen">Welcome screen</string>
     <string name="welcome_screen_description">Turn on or off welcome screen</string>
+    <string name="login">Log in</string>
     <string name="logout">Log out</string>
 
     <!-- Splash screen -->
