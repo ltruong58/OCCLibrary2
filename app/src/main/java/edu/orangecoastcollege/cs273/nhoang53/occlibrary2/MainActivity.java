@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean preferencesChanged = true;
 
-    //private Student student;
-
     private TextView mNotLoginTextView;
     int id;
+    private DBHelper db;
+    private Student student;
 
 
     @Override
@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         if(splashSharedPrefs.getInt("splash", 0) == 0)
         {
-            finish();
             Intent intent = new Intent(this, SplashActivity.class);
+            finish();
             startActivity(intent);
         }
         else if(splashSharedPrefs.getInt("splash", 0) == 1)
@@ -65,47 +65,37 @@ public class MainActivity extends AppCompatActivity {
 
         mNotLoginTextView = (TextView) findViewById(R.id.notLoginTextView);
 
+        // Restore preferences
+        studentSharedPrefs = getSharedPreferences(STUDENT_PREFS, 0);
+        editorStudent = studentSharedPrefs.edit();
+        id = studentSharedPrefs.getInt("studentId", 0); // if not, id = 0
+        if(id == 0)
+        {
+            mNotLoginTextView.setText(R.string.not_login);
+            mNotLoginTextView.setEnabled(true);
+        }
+        else
+        {
+            db = new DBHelper(this);
+            student = db.getStudent(id);
+            mNotLoginTextView.setText("Have a nice day "
+                                    + student.getFirstName() + " "
+                                    + student.getLastName());
+            mNotLoginTextView.setTextSize(18);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Restore preferences
-        studentSharedPrefs = getSharedPreferences(STUDENT_PREFS, 0);
-        editorStudent = studentSharedPrefs.edit();
-        id = studentSharedPrefs.getInt("studentId", 0); // if not, id = 0
 
-        /*Log.i("\nOCC Library. id:", String.valueOf(id));
-        ///Log.i("\nOCC Library. id:", String.valueOf(prefs.getInt("studentId", 0)));
-        Log.i("OCC Library. LastName:", prefs.getString("lastName", null));
-        Log.i("OCC Library. FistName:", prefs.getString("firstName", null));
-        Log.i("OCC Library. noShow:", String.valueOf(prefs.getInt("noShowTimes", 0)));*/
-
-        if(id == 0)
-        {
-            //login(getCurrentFocus());
-            mNotLoginTextView.setText(R.string.not_login);
-            mNotLoginTextView.setEnabled(true);
-        }
-        else
-        {
-            String lastName = studentSharedPrefs.getString("lastName", null);
-            String firstName = studentSharedPrefs.getString("firstName", null);
-            //int noShowTime = prefs.getInt("noShowTimes", 0);
-            //student = new Student(id, lastName, firstName, "", noShowTime);
-            //mNotLoginTextView.setText("Have a nice day " + firstName + " " + lastName);
-            mNotLoginTextView.setText("Have a nice day ");
-            mNotLoginTextView.setTextSize(18);
-            //mNotLoginTextView.setEnabled(false);
-        }
     }
 
     // login
     public void login(View view)
     {
         Intent intent = new Intent(this, LoginActivity.class);
-        finish();
         startActivity(intent);
     }
 

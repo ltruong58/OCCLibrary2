@@ -42,7 +42,7 @@ public class PickDateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_date);
 
-        deleteDatabase(DBHelper.DATABASE_NAME);
+        //deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
 
         db.importRoomsFromCSV("rooms.csv");

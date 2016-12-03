@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         db = new DBHelper(this);
         db.importStudentFromCSV("students.csv");
         allStudentList = db.getAllStudents();
-        Log.i("\nOCC Library.", allStudentList.toString());
+        //Log.i("\nOCC Library.", allStudentList.toString());
 
         mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
         mStudentIdEditText = (EditText) findViewById(R.id.studentIdEditText);
@@ -130,12 +130,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     //go to main page
                     Intent intent = new Intent(this, MainActivity.class);
-                    finish();
+                    this.finish();
                     startActivity(intent);
 
-                    //i = allStudentList.size(); // stop the loop
+                    i = allStudentList.size(); // stop the loop
 
-                } else {
+                }
+                else {
                     mLogInStatusTextView.setText(R.string.login_fail);
                     mLogInStatusTextView.setTextColor(getResources().getColor(R.color.colorLoginFail));
                     mStudentIdNullTextView.requestFocus();
