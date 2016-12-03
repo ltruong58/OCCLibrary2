@@ -159,7 +159,7 @@
             android:id="@+id/textView26" />
 
         <TextView
-            android:text="TextView"
+            android:text="room#"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView25"
@@ -179,7 +179,7 @@
             android:layout_alignBottom="@+id/roomReservingTextView" />
 
         <TextView
-            android:text="TextView"
+            android:text="book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView26"

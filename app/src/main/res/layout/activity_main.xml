@@ -129,7 +129,8 @@
                 app:srcCompat="@drawable/contact_us"
                 android:id="@+id/imageView7"
                 android:layout_weight="1"
-                android:clickable="true" />
+                android:clickable="true"
+                android:onClick="contactUs" />
 
             <ImageView
                 android:layout_width="match_parent"

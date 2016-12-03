@@ -26,7 +26,7 @@
     <string name="contact_us">Contact Us</string>
     <string name="borrow_book">Borrow Book</string>
     <string name="welcome">WELCOME TO OCC LIBRARY</string>
-    <string name="not_login">* You MUST login to use all library functions. <u>Click to login.</u></string>
+    <string name="not_login">* <u>You MUST login to use all library functions. Click to login.</u></string>
 
     <!-- Student Profile activity -->
     <string name="student_information">Student Information</string>
@@ -54,7 +54,18 @@
     <string name="splash">Good place to study</string>
     <string name="welcome_occ_library">Welcome to OCC library</string>
 
+    <!-- Contact activity -->
+    <string name="contact_label">Contact</string>
+    <string name="office_hours">OFFICE HOURS</string>
+    <string name="contact_info">CONTACT INFOR</string>
+    <string name="hours">Monday: 8 a.m. - 9 p.m. \nTuesday: 8 a.m - 9 p.m. \nWednesday: 8 a.m - 9 p.m. \nThursday: 8 a.m - 9 p.m. \nFriday: 8 a.m - 3 p.m. \nSaturday: 10 a.m - 3 p.m. \nSunday: CLOSED.\n
+    </string>
+    <string name="info">wsmith30@occ.cccd.edu \n(714) 432-5885</string>
+    <string name="location">LOCATION</string>
+    <string name="address">2701 Fairview Road Costa Mesa, California 92626</string>
+
     <!-- pick date activity -->
     <string name="pick_date_title">Please pick a valid date</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

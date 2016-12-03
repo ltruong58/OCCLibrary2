@@ -289,7 +289,7 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(DATABASE_STUDENT_TABLE, null, STUDENT_KEY_FIELD_ID + "=?",
                 new String[]{String.valueOf(studentId)}, null, null, null);
-        if(cursor != null)
+        /*if(cursor != null)
         {
             cursor.moveToFirst();
         }
@@ -298,9 +298,9 @@ class DBHelper extends SQLiteOpenHelper {
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
-                        cursor.getInt(4));
+                        cursor.getInt(4));*/
 
-       /* Student student = null;
+        Student student = null;
         if (cursor.moveToFirst()) {
             do {
                 student = new Student(cursor.getInt(0),
@@ -309,7 +309,7 @@ class DBHelper extends SQLiteOpenHelper {
                         cursor.getString(3),
                         cursor.getInt(4));
             } while (cursor.moveToNext());
-        }*/
+        }
 
 
         db.close();

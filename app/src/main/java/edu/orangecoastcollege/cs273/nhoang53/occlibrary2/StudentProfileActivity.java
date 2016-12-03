@@ -68,12 +68,15 @@ public class StudentProfileActivity extends AppCompatActivity {
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);
         int studentId = prefs.getInt("studentId", 0);
 
-        student = db.getStudent(studentId);
+        if(studentId != 0)
+        {
+            student = db.getStudent(studentId);
 
-        idTextView.setText(String.valueOf(student.getId()));
-        lastNameTextView.setText(student.getLastName());
-        firstNameTextView.setText(student.getFirstName());
-        noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
+            idTextView.setText(String.valueOf(student.getId()));
+            lastNameTextView.setText(student.getLastName());
+            firstNameTextView.setText(student.getFirstName());
+            noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
+        }
 
         // get room name
         /*room = db.getRoom(studentId);

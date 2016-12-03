@@ -214,6 +214,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    // Contact Us
+    public void contactUs(View view)
+    {
+        Intent intent = new Intent(this, ContactActivity.class);
+        startActivity(intent);
+    }
+
+
     /**
      * Long Truong
      */
