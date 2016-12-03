@@ -1,5 +1,6 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,6 +77,11 @@ public class StudentProfileActivity extends AppCompatActivity {
             lastNameTextView.setText(student.getLastName());
             firstNameTextView.setText(student.getFirstName());
             noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
+        }
+        else
+        {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         // get room name

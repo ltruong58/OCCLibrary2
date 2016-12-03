@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        /*PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         PreferenceManager.getDefaultSharedPreferences(this).
-                registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+                registerOnSharedPreferenceChangeListener(preferenceChangeListener);*/
 
         mNotLoginTextView = (TextView) findViewById(R.id.notLoginTextView);
 
@@ -124,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         settingPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean switchPrefs = settingPrefs.getBoolean("splashPrefs", true);
         if(!switchPrefs) //if not true
@@ -186,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Preferences
-    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener =
+    // Preferences doesn't work
+    /*private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener =
             new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
-            };
+            };*/
 
     // Contact Us
     public void contactUs(View view)
@@ -220,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ContactActivity.class);
         startActivity(intent);
     }
-
 
     /**
      * Long Truong

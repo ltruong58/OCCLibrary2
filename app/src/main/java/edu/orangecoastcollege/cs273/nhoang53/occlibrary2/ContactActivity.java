@@ -31,6 +31,7 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         LatLng OCCLibrary = new LatLng(33.672534,-117.907814);
         mGoogleMap.addMarker(new MarkerOptions().title("OCC Library").position(OCCLibrary));
         //mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(OCCLibrary));
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(OCCLibrary, 15));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(OCCLibrary, 14.5f));
+        //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(OCCLibrary, 15.5f), 2000, null); //move in 2sec
     }
 }
