@@ -103,9 +103,7 @@ public class MainActivity extends AppCompatActivity {
     {
         if(id == 0)
         {
-            Intent intent = new Intent(this, LoginActivity.class);
-            finish();
-            startActivity(intent);
+            login(view);
         }
         else {
             Intent intent = new Intent(this, StudentProfileActivity.class);

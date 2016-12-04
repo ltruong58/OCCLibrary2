@@ -2,9 +2,9 @@
     <string name="app_name">OCC Library 2</string>
     <string name="action_settings">Settings</string>
 
-    <string name="title_activity_login2">LoginActivity2</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_student_profile">StudentProfileActivity</string>
+    <string name="title_activity_login2" translatable="false">LoginActivity2</string>
+    <string name="title_activity_main" translatable="false">MainActivity</string>
+    <string name="title_activity_student_profile" translatable="false">StudentProfileActivity</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to login -->
@@ -30,7 +30,7 @@
 
     <!-- Student Profile activity -->
     <string name="student_information">Student Information</string>
-    <string name="student_activity">Student Activity</string>
+    <string name="student_activity" translatable="false">Student Activity</string>
     <string name="id">ID:</string>
     <string name="first_name">First name:</string>
     <string name="last_name">Last name:</string>
@@ -61,9 +61,9 @@
     <string name="contact_info">CONTACT INFOR</string>
     <string name="hours">Monday: 8 a.m. - 9 p.m. \nTuesday: 8 a.m - 9 p.m. \nWednesday: 8 a.m - 9 p.m. \nThursday: 8 a.m - 9 p.m. \nFriday: 8 a.m - 3 p.m. \nSaturday: 10 a.m - 3 p.m. \nSunday: CLOSED.\n
     </string>
-    <string name="info">wsmith30@occ.cccd.edu \n(714) 432-5885</string>
+    <string name="info" translatable="false">wsmith30@occ.cccd.edu \n(714) 432-5885</string>
     <string name="location">LOCATION</string>
-    <string name="address">2701 Fairview Road Costa Mesa, California 92626</string>
+    <string name="address" translatable="false">2701 Fairview Road Costa Mesa, California 92626</string>
 
     <!-- pick date activity -->
     <string name="pick_date_title">Please pick a valid date</string>
