@@ -6,7 +6,6 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -59,11 +58,11 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String ROOM_BOOKING_FIELD_HOURS_USED = "hours_used";
 
     // DEFINE THE FIELDS (COLUMN NAMES) FOR THE STUDENT TABLE
-    private static final String STUDENT_KEY_FIELD_ID = "student_id";
-    private static final String STUDENT_KEY_FIELD_LAST_NAME = "last_name";
-    private static final String STUDENT_KEY_FIELD_FIRST_NAME = "first_name";
-    private static final String STUDENT_KEY_FIELD_PASSWORD = "password";
-    private static final String STUDENT_KEY_FIELD_NO_SHOW_TIMES = "no_show_times";
+    private static final String KEY_FIELD_ID = "student_id";
+    private static final String KEY_FIELD_LAST_NAME = "last_name";
+    private static final String KEY_FIELD_FIRST_NAME = "first_name";
+    private static final String KEY_FIELD_PASSWORD = "password";
+    private static final String KEY_FIELD_NO_SHOW_TIMES = "no_show_times";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -94,11 +93,11 @@ class DBHelper extends SQLiteOpenHelper {
 
         //STUDENT
         table = "CREATE TABLE " + DATABASE_STUDENT_TABLE + "("
-                + STUDENT_KEY_FIELD_ID + " INTEGER, "
-                + STUDENT_KEY_FIELD_FIRST_NAME + " TEXT, "
-                + STUDENT_KEY_FIELD_LAST_NAME + " TEXT, "
-                + STUDENT_KEY_FIELD_PASSWORD + " TEXT,"
-                + STUDENT_KEY_FIELD_NO_SHOW_TIMES + " INTEGER)";
+                + KEY_FIELD_ID + " INTEGER, "
+                + KEY_FIELD_FIRST_NAME + " TEXT, "
+                + KEY_FIELD_LAST_NAME + " TEXT, "
+                + KEY_FIELD_PASSWORD + " TEXT,"
+                + KEY_FIELD_NO_SHOW_TIMES + " INTEGER)";
         sqLiteDatabase.execSQL(table);
 
         //ROOM_BOOKING
@@ -112,7 +111,7 @@ class DBHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_ROOM_ID + ") REFERENCES "
                 + DATABASE_ROOM_TABLE + "(" + ROOM_KEY_FIELD_ID + "),"
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_STUDENT_ID + ") REFERENCES "
-                + DATABASE_STUDENT_TABLE + "(" + STUDENT_KEY_FIELD_ID + ")"+ ")";
+                + DATABASE_STUDENT_TABLE + "(" + KEY_FIELD_ID + ")"+ ")";
         sqLiteDatabase.execSQL (table);
 
     }
@@ -128,7 +127,7 @@ class DBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    // import data from csv file
+    //******* import data from csv file ********
     // ROOM
     public boolean importRoomsFromCSV(String csvFileName) {
         AssetManager manager = mContext.getAssets();
@@ -237,18 +236,18 @@ class DBHelper extends SQLiteOpenHelper {
     }
     // BOOK
 
-    //********* STUDENT TABLE OPERATIONS: ADD, GET, GET ALL, UPDATE, DELETE
+    //********* STUDENT TABLE OPERATIONS: ADD, GET 1, GET ALL, UPDATE, DELETE **********
 
     public void addStudent(Student student)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(STUDENT_KEY_FIELD_ID, student.getId());
-        values.put(STUDENT_KEY_FIELD_LAST_NAME, student.getLastName());
-        values.put(STUDENT_KEY_FIELD_FIRST_NAME, student.getFirstName());
-        values.put(STUDENT_KEY_FIELD_PASSWORD, student.getPassword());
-        values.put(STUDENT_KEY_FIELD_NO_SHOW_TIMES, student.getNoShowTimes());
+        values.put(KEY_FIELD_ID, student.getId());
+        values.put(KEY_FIELD_LAST_NAME, student.getLastName());
+        values.put(KEY_FIELD_FIRST_NAME, student.getFirstName());
+        values.put(KEY_FIELD_PASSWORD, student.getPassword());
+        values.put(KEY_FIELD_NO_SHOW_TIMES, student.getNoShowTimes());
 
         db.insert(DATABASE_STUDENT_TABLE, null, values);
         db.close();
@@ -278,11 +277,54 @@ class DBHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(STUDENT_KEY_FIELD_NO_SHOW_TIMES, student.getNoShowTimes() + 1);
+        values.put(KEY_FIELD_NO_SHOW_TIMES, student.getNoShowTimes() + 1);
 
-        db.update(DATABASE_STUDENT_TABLE, values, STUDENT_KEY_FIELD_ID + " =?",
+        db.update(DATABASE_STUDENT_TABLE, values, KEY_FIELD_ID + " =?",
                 new String[] {String.valueOf(student.getId())});
         db.close();
+    }
+
+    public Student getStudent(int studentId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(DATABASE_STUDENT_TABLE,
+                new String[]{KEY_FIELD_ID, KEY_FIELD_LAST_NAME, KEY_FIELD_FIRST_NAME, KEY_FIELD_PASSWORD, KEY_FIELD_NO_SHOW_TIMES},
+                KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(studentId)}, null, null, null, null);
+        /*if(cursor != null)
+        {
+            cursor.moveToFirst();
+        }
+
+        Student student = new Student(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getInt(4));*/
+
+        Student student = null;
+        if (cursor.moveToFirst()) {
+            do {
+                student = new Student(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getInt(4));
+            } while (cursor.moveToNext());
+        }
+
+
+        db.close();
+        return student;
+    }
+
+    public void changePassword(int studentId, String newPassword)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_FIELD_PASSWORD, newPassword);
+
+        db.update(DATABASE_STUDENT_TABLE, values, KEY_FIELD_ID + "=?",
+                new String[]{String.valueOf(studentId)});
     }
 
     //********** ROOM DATABASE OPERATIONS:  ADD, GETALL, EDIT, DELETE
@@ -358,14 +400,23 @@ class DBHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)},
                 null, null, null, null);
 
-        if (cursor != null)
+        /*if (cursor != null)
             cursor.moveToFirst();
 
         Room room = new Room(
                 cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2),
-                cursor.getInt(3));
+                cursor.getInt(3));*/
+        Room room = null;
+        if (cursor.moveToFirst()) {
+            do {
+                room = new Room(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getInt(3));
+            } while (cursor.moveToNext());
+        }
 
         db.close();
         return room;

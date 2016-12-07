@@ -11,6 +11,8 @@ public class Student {
     private String mPassword;
     private int mNoShowTimes;
 
+    public Student() {    }
+
     public Student(int mId, String mLastName, String mFirstName, String mPassword, int mNoShowTimes) {
         this.mId = mId;
         this.mLastName = mLastName;
