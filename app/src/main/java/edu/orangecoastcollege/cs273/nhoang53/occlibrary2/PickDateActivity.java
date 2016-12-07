@@ -20,8 +20,6 @@ public class PickDateActivity extends AppCompatActivity {
     private static final int FULL_OR_WEEKEND_DAYS = 0; // no time period available to book
     private static final int AVAILABLE = 1; // still available in some periods.
     private static final int EMPTY = 2; // no booking on this day
-    private static final String LIBRARY_OPENING_TIME = "700am";
-    private static final String LIBRARY_CLOSING_TIME = "800pm";
     private static final int LIBRARY_TOTAL_HOURS_OPEN = 13; // Is used to check room/ date is full booked
     private static final int IS_1_TO_10 = 0;
     private static final int IS_11_TO_20 = 1;
@@ -30,7 +28,7 @@ public class PickDateActivity extends AppCompatActivity {
 
     private DBHelper db;
     private List<Room> allRoomsList;
-    private List<Student> allStudentsList;
+
     private List<RoomBooking> allRoomBookingsList;
     private int datesRange; // 0: 1-10, 1: 11-20, 2:21-30
 
@@ -47,10 +45,10 @@ public class PickDateActivity extends AppCompatActivity {
         //deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
 
-        db.importRoomsFromCSV("rooms.csv");
+       /* db.importRoomsFromCSV("rooms.csv");
         db.importRoomBookingsFromCSV("roomBookings.csv");
-
-        allStudentsList = db.getAllStudents();
+        db.importStudentFromCSV("students.csv");*/
+        //allStudentsList = db.getAllStudents();
         allRoomsList = db.getAllRooms();
         allRoomBookingsList = db.getAllRoomBookings();
 
@@ -68,7 +66,6 @@ public class PickDateActivity extends AppCompatActivity {
 
         //test
         Calendar calendar = Calendar.getInstance();
-
         for(int i = 0; i < 30; i++)
         {
             Calendar nCalendar = Calendar.getInstance();
@@ -76,8 +73,8 @@ public class PickDateActivity extends AppCompatActivity {
             calendarsList.add(nCalendar);
         }
 
-        datesRangeTextView.setText(String.valueOf(calendar.getTimeInMillis()));
-        //datesRangeTextView.setText(getString(R.string.dates_range,getDateStringDisplay(calendarsList.get(0)),getDateStringDisplay(calendarsList.get(calendarsList.size() - 1))));
+        //datesRangeTextView.setText(String.valueOf(calendar.get()));
+        datesRangeTextView.setText(getString(R.string.dates_range,getDateStringDisplay(calendarsList.get(0)),getDateStringDisplay(calendarsList.get(calendarsList.size() - 1))));
         // load 1st 10 of 30 days ahead from current date
         showDateOnTable( datesRange, calendarsList);
 
@@ -125,9 +122,9 @@ public class PickDateActivity extends AppCompatActivity {
                     int curMonth = mCalendar.get(Calendar.MONTH) + 1; // need +1
                     int curDate = mCalendar.get(Calendar.DATE);
                     int curYear = mCalendar.get(Calendar.YEAR);
-                    String date = String.valueOf(curMonth)
-                            + String.valueOf(curDate)
-                            +String.valueOf(curYear);
+                    String date = getString(R.string.get_date_from_calendar, String.valueOf(curMonth)
+                            ,String.valueOf(curDate)
+                            ,String.valueOf(curYear));
 
 
                     String currentDayString = "";
@@ -236,6 +233,7 @@ public class PickDateActivity extends AppCompatActivity {
                 background = ContextCompat.getDrawable(this, R.drawable.available_background);
                 break;
             case FULL_OR_WEEKEND_DAYS:
+                linearLayout.setClickable(false);
                 background = ContextCompat.getDrawable(this, R.drawable.full_background);
                 break;
             default:

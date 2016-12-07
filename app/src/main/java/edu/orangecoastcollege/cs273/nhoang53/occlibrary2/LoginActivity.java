@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
 
         // database operation
-        deleteDatabase(DBHelper.DATABASE_NAME);
+        ////deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
         db.importStudentFromCSV("students.csv");
         allStudentList = db.getAllStudents();

@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/dateRangeTextView"
         android:gravity="center"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:orientation="horizontal"

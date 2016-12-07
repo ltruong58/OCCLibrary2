@@ -33,7 +33,6 @@
         <activity android:name=".PickDateActivity" />
         <activity android:name=".PickRoomActivity" />
         <activity android:name=".PickBookingTimeActivity"></activity>
-        <activity android:name=".PickDateActivity" />
         <activity android:name=".SplashActivity" />
         <activity android:name=".SettingActivity" />
         <activity
@@ -50,6 +49,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <activity android:name=".PickTimePeriodDetails" />
+        <activity android:name=".RoomBookingDetailsActivity" />
+        <activity android:name=".ContactUsActivity"/>
 
     </application>
 

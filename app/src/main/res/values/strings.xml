@@ -66,11 +66,32 @@
     <string name="address" translatable="false">2701 Fairview Road Costa Mesa, California 92626</string>
 
     <!-- pick date activity -->
-    <string name="pick_date_title">Please pick a valid date</string>
-    <string name="dates_range">%1$s to %2$s</string>
+    <string name="pick_date_title">Please pick a available date</string>
+    <string name="dates_range">from %1$s to %2$s</string>
+    <string name="get_date_from_calendar">%1$s/%2$s/%3$s</string>
 
     <!-- pick room activity -->
     <string name="room_capacity">Capacity: %1$d</string>
+
     <string name="title_activity_maps">Map</string>
+
+    <string name="pick_room_title">Please pick an available room in %1$s</string>
+
+    <string name="limit_time">Please pick a time from %1$s to %2$s</string>
+    <string name="selected_room">Selected room: %1$d </string>
+    <string name="selected_date">Selected date: %1$s </string>
+
+    <!-- pick period activity -->
+    <string name="pick_period_title">Please pick a available period</string>
+
+    <!-- room booking details activity -->
+    <string name="details">Your reservation is successful. Below is your reservation information:  \n
+        Student name: %1$s \n
+        Selected date: %2$s \n
+        Selected room: %3$s \n
+        Reservation start time: %4$s \n
+        Reservation end time: %5$s \n
+        Thank you for using our service.
+    </string>
 
 </resources>

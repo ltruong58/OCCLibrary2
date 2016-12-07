@@ -18,8 +18,6 @@ public class PickRoomActivity extends AppCompatActivity {
     private static final int FULL_OR_WEEKEND_DAYS = 0; // no time period available to book
     private static final int AVAILABLE = 1; // still available in some periods.
     private static final int EMPTY = 2; // no booking on this day
-    private static final String LIBRARY_OPENING_TIME = "700am";
-    private static final String LIBRARY_CLOSING_TIME = "800pm";
     private static final int LIBRARY_TOTAL_HOURS_OPEN = 13; // Is used to check room/ date is full booked
     private static final int IS_1_TO_10 = 0;
     private static final int NUMBER_OF_ROOMS_ON_TABLE = 10;
@@ -28,12 +26,13 @@ public class PickRoomActivity extends AppCompatActivity {
 
     private DBHelper db;
     private List<Room> allRoomsList;
-    private List<Student> allStudentsList;
+
     private List<RoomBooking> allRoomBookingsList;
     private int roomsRange;
     private GridLayout roomsLayout;
     private ImageButton nextButton;
     private ImageButton previousButton;
+    private TextView pickRoomTitleTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class PickRoomActivity extends AppCompatActivity {
         roomsLayout = (GridLayout) findViewById(R.id.roomsGridLayout);
         nextButton = (ImageButton) findViewById(R.id.pickRoom_nextButton);
         previousButton = (ImageButton) findViewById(R.id.pickRoom_previousButton);
-
+        pickRoomTitleTextView = (TextView) findViewById(R.id.pickRoomTitleTextView);
 
         previousButton.setVisibility(View.INVISIBLE);
         if(allRoomsList.size() < NUMBER_OF_ROOMS_ON_TABLE)
@@ -60,6 +59,7 @@ public class PickRoomActivity extends AppCompatActivity {
         Intent intentFromPickDateActivity = getIntent();
 
         date = intentFromPickDateActivity.getStringExtra("Date");
+        pickRoomTitleTextView.setText(getString(R.string.pick_room_title,date));
 
         showRoomOnTable(roomsRange, date);
     }
@@ -122,6 +122,7 @@ public class PickRoomActivity extends AppCompatActivity {
                 background = ContextCompat.getDrawable(this, R.drawable.available_background);
                 break;
             case FULL_OR_WEEKEND_DAYS:
+                linearLayout.setClickable(false);
                 background = ContextCompat.getDrawable(this, R.drawable.full_background);
                 break;
             default:
@@ -131,7 +132,7 @@ public class PickRoomActivity extends AppCompatActivity {
 
     private int checkRoomStatus(Room room, String date)
     {
-        int totalHoursUsed = 0;
+        float totalHoursUsed = 0;
         for(RoomBooking roomBooking : allRoomBookingsList)
         {
             if(roomBooking.getmRoomId() == room.getmId() && roomBooking.getmDate().equals(date))
@@ -193,8 +194,8 @@ public class PickRoomActivity extends AppCompatActivity {
             Intent pickTimeIntent = new Intent(this, PickBookingTimeActivity.class);
 
             pickTimeIntent.putExtra("Date", date);
-            pickTimeIntent.putExtra("Room", String.valueOf(selectedRoom.getmId()));
-
+            //pickTimeIntent.putExtra("Room", String.valueOf(selectedRoom.getmId()));
+            pickTimeIntent.putExtra("Room", selectedRoom.getmId());
             startActivity(pickTimeIntent);
         }
     }

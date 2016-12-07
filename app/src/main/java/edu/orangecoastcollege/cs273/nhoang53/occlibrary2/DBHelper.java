@@ -107,7 +107,7 @@ class DBHelper extends SQLiteOpenHelper {
                 + ROOM_BOOKING_FIELD_STUDENT_ID + " INTEGER, "
                 + ROOM_BOOKING_FIELD_DATE + " TEXT, "
                 + ROOM_BOOKING_FIELD_START_TIME + " TEXT, "
-                + ROOM_BOOKING_FIELD_HOURS_USED + " INTEGER, "
+                + ROOM_BOOKING_FIELD_HOURS_USED + " REAL, "
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_ROOM_ID + ") REFERENCES "
                 + DATABASE_ROOM_TABLE + "(" + ROOM_KEY_FIELD_ID + "),"
                 + "FOREIGN KEY(" + ROOM_BOOKING_FIELD_STUDENT_ID + ") REFERENCES "
@@ -427,7 +427,7 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_BOOKING_KEY_FIELD_ID, roomBooking.getmId());
+        //values.put(ROOM_BOOKING_KEY_FIELD_ID, roomBooking.getmId());
         values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getmRoomId());
         values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getmStudentId());
         values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getmDate());
@@ -458,7 +458,7 @@ class DBHelper extends SQLiteOpenHelper {
                                 cursor.getInt(2),
                                 cursor.getString(3),
                                 cursor.getString(4),
-                                cursor.getInt(5)      );
+                                cursor.getFloat(5) );
                 roomBookingsList.add(roomBooking);
             } while (cursor.moveToNext());
         }
