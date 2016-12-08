@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_student_profile"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.StudentProfileActivity"
+    tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.MainActivity"
     android:orientation="vertical"
-    android:background="@android:color/background_light"
     android:weightSum="10">
 
-    <include layout="@layout/content_student_profile"/>
-
+    <include layout="@layout/fragment_main"/>
 
 </LinearLayout>

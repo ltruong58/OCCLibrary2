@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
@@ -19,9 +20,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    public static final String STUDENT_PREFS = "studentPrefs";
-    public static final String SPLASH_PREF = "splashPrefs";
+public class MainActivity extends AppCompatActivity
+        implements SharedPreferences.OnSharedPreferenceChangeListener{
+
+    public static final String STUDENT_PREFS = "studentPrefs"; // save infor of student
+    public static final String SPLASH_PREF = "splashPrefs"; // control ON - OFF splash screen
     private SharedPreferences studentSharedPrefs;
     private SharedPreferences splashSharedPrefs;
     private SharedPreferences settingPrefs;
@@ -35,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper db;
     private Student student;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         // go to SplashActivity
         splashSharedPrefs = getSharedPreferences(SPLASH_PREF, 0);
         editorSplash = splashSharedPrefs.edit();
-        Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         if(splashSharedPrefs.getInt("splash", 0) == 0)
         {
             Intent intent = new Intent(this, SplashActivity.class);
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         {
             editorSplash.putInt("splash", 0); // put it back to 0, so it will splash next time
             editorSplash.apply();
-            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+            //Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         }
 
 
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         mNotLoginTextView = (TextView) findViewById(R.id.notLoginTextView);
 
         // Restore preferences
+
         studentSharedPrefs = getSharedPreferences(STUDENT_PREFS, 0);
         editorStudent = studentSharedPrefs.edit();
         id = studentSharedPrefs.getInt("studentId", 0); // if not, id = 0
@@ -88,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     // login
@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume()
     {
+        //Toast.makeText(this, "Preference changed onResume()", Toast.LENGTH_SHORT).show();
+        // This work on Portrait
         settingPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean switchPrefs = settingPrefs.getBoolean("splashPrefs", true);
         if(!switchPrefs) //if not true
@@ -145,13 +147,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         super.onResume();
+        // this work on Landscape
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
-    // Setting
+    @Override
+    protected void onPause() {
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    // Setting menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+
         //get the device's current orientation
-        int orientation = getResources().getConfiguration().orientation;
+        /*int orientation = getResources().getConfiguration().orientation;
         if(orientation == Configuration.ORIENTATION_PORTRAIT)
         {
             // Inflate the menu; this adds items to the action bar if it is present.
@@ -159,12 +172,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else
-            return false;
+            return false;*/
     }
 
     // to change value in Menu item
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            menu.findItem(R.id.action_settings).setVisible(false);
+
         if(id == 0)
         {
             menu.findItem(R.id.action_log).setTitle(R.string.login);
@@ -269,5 +286,48 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, PickDateActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
+    {
+        //Toast.makeText(this, "Preference changed.", Toast.LENGTH_SHORT).show();
+
+        settingPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        boolean switchPrefs = settingPrefs.getBoolean("splashPrefs", true);
+        if(!switchPrefs) //if not true
+        {
+            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+            editorSplash.putInt("splash", -1);
+            editorSplash.apply();
+            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+        }
+        else
+        {
+            if(splashSharedPrefs.getInt("splash", 0) == -1) {
+                editorSplash.putInt("splash", 0);
+                editorSplash.apply();
+                Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+            }
+        }
+
+        /*if(key.equals(SPLASH_PREF))
+        {
+            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+
+            if(splashSharedPrefs.getInt("splash", 0) == 0)
+            {
+                editorSplash.putInt("splash", -1);
+                editorSplash.apply();
+                Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+            }
+            else if(splashSharedPrefs.getInt("splash", 0) == -1)
+            {
+                editorSplash.putInt("splash", 0);
+                editorSplash.apply();
+                Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
+            }
+
+        }*/
     }
 }

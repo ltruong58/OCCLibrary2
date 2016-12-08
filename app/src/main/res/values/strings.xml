@@ -74,6 +74,7 @@
     <string name="room_capacity">Capacity: %1$d</string>
 
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_setting">SettingActivity</string>
 
     <string name="pick_room_title">Please pick an available room in %1$s</string>
 

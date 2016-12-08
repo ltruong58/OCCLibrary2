@@ -13,6 +13,5 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-    <include layout="@layout/content_contact"/>
-
+    <include layout="@layout/fragment_contact"/>
 </LinearLayout>
