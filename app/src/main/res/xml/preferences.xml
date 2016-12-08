@@ -10,9 +10,4 @@
         android:checked="true"
         android:persistent="true"/>
 
-    <Preference
-        android:title="Log in"
-        android:key="actionLog"
-        android:persistent="true" />
-
 </PreferenceScreen>
