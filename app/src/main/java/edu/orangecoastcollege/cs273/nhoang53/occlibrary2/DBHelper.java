@@ -465,12 +465,12 @@ class DBHelper extends SQLiteOpenHelper {
         return roomBookingsList;
     }
 
-    public void deleteRoomBooking(RoomBooking roomBooking) {
+    public void deleteRoomBooking(int studentId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // DELETE THE TABLE ROW
-        db.delete(DATABASE_ROOM_BOOKING_TABLE, ROOM_BOOKING_KEY_FIELD_ID + " = ?",
-                new String[]{String.valueOf(roomBooking.getmId())});
+        db.delete(DATABASE_ROOM_BOOKING_TABLE, ROOM_BOOKING_FIELD_STUDENT_ID + " = ?",
+                new String[]{String.valueOf(studentId)});
         db.close();
     }
 
@@ -495,26 +495,30 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public RoomBooking getRoomBooking(int id) {
+    public RoomBooking getRoomBooking(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 DATABASE_ROOM_BOOKING_TABLE,
                 new String[]{ROOM_BOOKING_KEY_FIELD_ID, ROOM_BOOKING_FIELD_ROOM_ID, ROOM_BOOKING_FIELD_STUDENT_ID,
                         ROOM_BOOKING_FIELD_DATE, ROOM_BOOKING_FIELD_START_TIME, ROOM_BOOKING_FIELD_HOURS_USED},
-                ROOM_BOOKING_KEY_FIELD_ID + "=?",
-                new String[]{String.valueOf(id)},
+                ROOM_BOOKING_FIELD_STUDENT_ID + " =?",
+                new String[]{String.valueOf(studentId)},
                 null, null, null, null);
 
         if (cursor != null)
             cursor.moveToFirst();
 
-        RoomBooking roomBooking = new RoomBooking(
-                cursor.getInt(0),
-                cursor.getInt(1),
-                cursor.getInt(2),
-                cursor.getString(3),
-                cursor.getString(4),
-                cursor.getInt(5));
+        RoomBooking roomBooking = null;
+        if (cursor.moveToFirst()) {
+            do {
+                roomBooking = new RoomBooking(cursor.getInt(0),
+                                        cursor.getInt(1),
+                                        cursor.getInt(2),
+                                        cursor.getString(3),
+                                        cursor.getString(4),
+                                        cursor.getFloat(5));
+            } while (cursor.moveToNext());
+        }
 
         db.close();
         return roomBooking;

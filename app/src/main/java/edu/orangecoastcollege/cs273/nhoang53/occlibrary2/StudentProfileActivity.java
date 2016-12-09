@@ -1,5 +1,7 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +30,7 @@ public class StudentProfileActivity extends AppCompatActivity {
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
     private EditText confrimPasswordEditText;
-    private Button roomReservingEditButton;
-    private Button bookBorrowingEditButton;
+    private Button roomReservingCancelButton;
     private Button resetButton;
     private Button savePasswordButton;
 
@@ -37,6 +38,9 @@ public class StudentProfileActivity extends AppCompatActivity {
     private DBHelper db;
     private Student student;
     private Room room;
+    private RoomBooking roomBooking;
+    private String roomReserving;
+    private int studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +64,14 @@ public class StudentProfileActivity extends AppCompatActivity {
         newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
         confrimPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 
-        roomReservingEditButton = (Button) findViewById(R.id.roomReservingEditButton);
-        bookBorrowingEditButton = (Button) findViewById(R.id.bookBorrowingEditButton);
+        roomReservingCancelButton = (Button) findViewById(R.id.roomReservingCancelButton);
         resetButton = (Button) findViewById(R.id.resetButton);
         savePasswordButton = (Button) findViewById(R.id.savePasswordButton);
 
         db = new DBHelper(this);
         // get student information
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);
-        int studentId = prefs.getInt("studentId", 0);
+        studentId = prefs.getInt("studentId", 0);
         student = db.getStudent(studentId);
 
         if(studentId != 0)
@@ -77,6 +80,21 @@ public class StudentProfileActivity extends AppCompatActivity {
             lastNameTextView.setText(student.getLastName());
             firstNameTextView.setText(student.getFirstName());
             noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
+
+            // get room name
+            roomBooking = db.getRoomBooking(studentId);
+            if(roomBooking != null)
+            {
+                room = db.getRoom(roomBooking.getmRoomId());
+                if (room != null)
+                    roomReservingTextView.setText(room.getmName());
+                else
+                    roomReservingTextView.setText("0");
+            }
+            else {
+                roomReservingTextView.setText("0");
+                roomReservingCancelButton.setVisibility(View.INVISIBLE);
+            }
         }
         else
         {
@@ -84,9 +102,34 @@ public class StudentProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        // get room name
-        /*room = db.getRoom(studentId);
-        roomReservingTextView.setText(room.getmName());*/
+
+    }
+
+    public void cancelRoomReserving(View view)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure to cancel?");
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                db.deleteRoomBooking(studentId);
+                startActivity(getIntent());
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        //builder.show();
     }
 
     public void reset (View view)

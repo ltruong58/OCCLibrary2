@@ -55,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         allStudentList = db.getAllStudents();
         //Log.i("\nOCC Library.", allStudentList.toString());
 
+        db.importRoomsFromCSV("rooms.csv");
+        db.importRoomBookingsFromCSV("roomBookings.csv");
+
         mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
         mStudentIdEditText = (EditText) findViewById(R.id.studentIdEditText);
         mLogInButton = (Button) findViewById(R.id.logInButton);

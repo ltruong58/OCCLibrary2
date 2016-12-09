@@ -13,7 +13,8 @@
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.LoginActivity"
     tools:showIn="@layout/activity_login"
     android:orientation="vertical"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:focusableInTouchMode="true">
 
     <!-- Login progress -->
 

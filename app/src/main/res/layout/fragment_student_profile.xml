@@ -7,7 +7,8 @@
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.StudentProfileActivity"
     android:orientation="vertical"
     android:background="@android:color/background_light"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:orientation="vertical"
@@ -171,16 +172,17 @@
             android:id="@+id/roomReservingTextView" />
 
         <Button
-            android:text="Edit"
+            android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/roomReservingEditButton"
+            android:id="@+id/roomReservingCancelButton"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="34dp"
             android:layout_marginEnd="34dp"
             android:textSize="10sp"
-            android:layout_alignBottom="@+id/roomReservingTextView" />
+            android:layout_alignBottom="@+id/roomReservingTextView"
+            android:onClick="cancelRoomReserving" />
 
         <TextView
             android:text="book"
@@ -191,16 +193,6 @@
             android:layout_alignStart="@+id/roomReservingTextView"
             android:id="@+id/bookBorrowTextView" />
 
-        <Button
-            android:text="Edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/bookBorrowTextView"
-            android:layout_alignRight="@+id/roomReservingEditButton"
-            android:layout_alignEnd="@+id/roomReservingEditButton"
-            android:id="@+id/bookBorrowingEditButton"
-            android:layout_below="@+id/roomReservingEditButton"
-            android:textSize="10sp" />
     </RelativeLayout>
 
     <LinearLayout
