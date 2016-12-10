@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RoomBookingDetailsActivity extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class RoomBookingDetailsActivity extends AppCompatActivity {
         {
             if(student.getId() == roomBooking.getmStudentId())
             {
-                studentName = student.getFirstName() + student.getLastName();
+                studentName = student.getFirstName() + " " + student.getLastName();
                 break;
             }
         }
@@ -47,10 +49,14 @@ public class RoomBookingDetailsActivity extends AppCompatActivity {
                 break;
             }
         }
-        float totalHours = roomBooking.getmHoursUsed();
-        int toMinutes = (int) totalHours * 60;
-        String endTime = String.format("%02d", toMinutes / 60) + ":" + String.format("%02d", toMinutes % 60);
-        detailsTextView.setText(getString(R.string.details, studentName, roomBooking.getmDate(), roomName, roomBooking.getmStartTime(), String.valueOf(roomBooking.getmHoursUsed())));
+        //float totalHours = roomBooking.getmHoursUsed();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+
+        Time startTime = Time.valueOf(roomBooking.getmStartTime());
+
+        Time endTime = new Time(startTime.getTime() + (long ) (roomBooking.getmHoursUsed()* 60 * 60 * 1000 ));
+        detailsTextView.setText(getString(R.string.details, studentName, roomBooking.getmDate(), roomName, sdf.format(startTime) , sdf.format(endTime)));
     }
 
     public void returnToMainMenu(View view )

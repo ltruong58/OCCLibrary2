@@ -69,7 +69,7 @@ public class TimePeriodListAdapter extends ArrayAdapter<TimePeriod> {
 
 
         periodLinearLayout.setTag(selectedTimePeriod);
-        DateFormat sdf = new SimpleDateFormat("HH:mm");
+        DateFormat sdf = new SimpleDateFormat("hh:mm aa");
         Time startTime = Time.valueOf(selectedTimePeriod.getStartTime());
         Time endTime = Time.valueOf(selectedTimePeriod.getEndTime());
         fromTextView.setText(sdf.format(startTime));

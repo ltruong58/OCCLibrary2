@@ -5,21 +5,24 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PickTimePeriodDetails extends AppCompatActivity {
 
     private TextView selectedRoomTextView;
     private TextView selectedDateTextView;
-    private TextView timeLimitTextView;
     private TextView seekBarTextView;
-    private EditText startTimeEditText;
+    private Spinner pickTimeSpinner;
     private SeekBar hoursSeekBar;
     private String date;
     private int room;
@@ -32,9 +35,7 @@ public class PickTimePeriodDetails extends AppCompatActivity {
 
         selectedDateTextView = (TextView) findViewById(R.id.selectedDateTextView);
         selectedRoomTextView = (TextView) findViewById(R.id.selectedRoomTextView);
-        timeLimitTextView = (TextView) findViewById(R.id.timeLimitTextView);
         seekBarTextView = (TextView) findViewById(R.id.seekBarTextView);
-        startTimeEditText = (EditText) findViewById(R.id.startTimeEditText);
         hoursSeekBar = (SeekBar) findViewById(R.id.hoursSeekBar);
 
         Intent intentFromPickBookingTimeActivity = getIntent();
@@ -43,26 +44,43 @@ public class PickTimePeriodDetails extends AppCompatActivity {
         TimePeriod timePeriod = intentFromPickBookingTimeActivity.getExtras().getParcelable("SelectedPeriod");
 
         // Update TextView
-        selectedRoomTextView.setText(getString(R.string.selected_room, room));
+        selectedRoomTextView.setText(getString(R.string.selected_room_text_view, room));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         try {
             Date ddate = sdf.parse(date);
-            selectedDateTextView.setText(getString(R.string.selected_date, sdf.format(ddate)));
+            selectedDateTextView.setText(getString(R.string.selected_date_text_view, sdf.format(ddate)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         sdf = new SimpleDateFormat("HH:mm");
-        try {
-            timeLimitTextView.setText(getString(R.string.limit_time, sdf.format(sdf.parse(timePeriod.getStartTime())), sdf.format(sdf.parse(timePeriod.getEndTime()))));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-        // EditText
+        // Spinner
+        pickTimeSpinner = (Spinner) findViewById(R.id.pickTimeSpinner);
+        addItemsOnSpinner(pickTimeSpinner, timePeriod);
 
         // SeekView
         hoursSeekBar.setOnSeekBarChangeListener(hoursChangeListener);
+    }
+
+    public void addItemsOnSpinner(Spinner spinner, TimePeriod timePeriod) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+        double duration = 0.5;
+        List<String> list = new ArrayList<>();
+        //String sTime;
+        Time tStartTime = new Time(Time.valueOf(timePeriod.getStartTime()).getTime());
+        Time tEndTime = Time.valueOf(timePeriod.getEndTime());
+        while (tStartTime.getTime() < (tEndTime.getTime() ))
+        {
+            list.add(sdf.format(tStartTime));
+            tStartTime = new Time(tStartTime.getTime() + (long)(duration*60*60*1000));
+        }
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
     }
 
     private SeekBar.OnSeekBarChangeListener hoursChangeListener = new SeekBar.OnSeekBarChangeListener() {
@@ -88,15 +106,18 @@ public class PickTimePeriodDetails extends AppCompatActivity {
 
         }
     };
-    public void showRoomBookingDetails(View view)
-    {
+    public void showRoomBookingDetails(View view) throws ParseException {
         // Get login studentID
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);
         int studentId = prefs.getInt("studentId", 0);
 
         float hoursUsed = (float) (hoursSeekBar.getProgress() + 30) / 60;
-        String startTime = startTimeEditText.getText().toString() + ":00";
-        RoomBooking roomBooking = new RoomBooking(room, studentId, date, startTime, hoursUsed);
+        String startTime = (String) pickTimeSpinner.getSelectedItem();
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+        Date tTime = sdf.parse(startTime);
+        sdf = new SimpleDateFormat("HH:mm:ss");
+        String sTime = sdf.format(tTime);
+        RoomBooking roomBooking = new RoomBooking(room, studentId, date, sTime, hoursUsed);
 
         // Store to database
         db = new DBHelper(this);

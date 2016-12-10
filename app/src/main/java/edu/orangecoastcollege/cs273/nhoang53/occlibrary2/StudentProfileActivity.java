@@ -14,6 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class StudentProfileActivity extends AppCompatActivity {
 
     private LinearLayout activity_student_profile;
@@ -82,12 +86,24 @@ public class StudentProfileActivity extends AppCompatActivity {
             noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
 
             // get room name
-            roomBooking = db.getRoomBooking(studentId);
+            List<RoomBooking> roomBookings = db.getAllRoomBookings();
+
+            Date date= Calendar.getInstance().getTime();
+            for(RoomBooking booking : roomBookings)
+            {
+                if(booking.getmStudentId() == studentId && (date.compareTo(new Date(booking.getmDate())) < 0))
+                {
+                    roomBooking = booking;
+                }
+            }
+            //roomBooking = db.getRoomBooking(studentId);
             if(roomBooking != null)
             {
                 room = db.getRoom(roomBooking.getmRoomId());
-                if (room != null)
+                if (room != null) {
                     roomReservingTextView.setText(room.getmName());
+                    roomReservingTextView.setTag(roomBooking);
+                }
                 else
                     roomReservingTextView.setText("0");
             }
@@ -114,7 +130,8 @@ public class StudentProfileActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                db.deleteRoomBooking(studentId);
+                RoomBooking roomBooking = (RoomBooking) roomReservingTextView.getTag();
+                db.deleteRoomBooking(roomBooking.getmId());
                 startActivity(getIntent());
                 finish();
             }

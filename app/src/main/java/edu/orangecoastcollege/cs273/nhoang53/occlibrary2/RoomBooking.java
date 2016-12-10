@@ -113,11 +113,6 @@ public class RoomBooking implements Parcelable{
         int year = Integer.parseInt(sDate.substring(sDate.lastIndexOf('/') + 1,sDate.length()));
         int hour = Integer.parseInt(sTime.substring(0,sTime.indexOf(':')));
         int minute = Integer.parseInt(sTime.substring(sTime.indexOf(':') + 1,sTime.lastIndexOf(':')));
-        Log.i("m: ", String.valueOf(month));
-        Log.i("d: ", String.valueOf(day));
-        Log.i("y: ", String.valueOf(year));
-        Log.i("h: ", String.valueOf(hour));
-        Log.i("mi: ", String.valueOf(minute));
 
         date = new Date(year, month, day, hour, minute);
         return date;

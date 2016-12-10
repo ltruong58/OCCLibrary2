@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener{
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         // go to SplashActivity
         splashSharedPrefs = getSharedPreferences(SPLASH_PREF, 0);
         editorSplash = splashSharedPrefs.edit();
@@ -58,7 +62,11 @@ public class MainActivity extends AppCompatActivity
             editorSplash.apply();
             //Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         }
-
+        db = new DBHelper(this);
+        /*deleteDatabase(DBHelper.DATABASE_NAME);
+        db.importStudentFromCSV("students.csv");
+        db.importRoomsFromCSV("rooms.csv");
+        db.importRoomBookingsFromCSV("roomBookings.csv");*/
 
         /*PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         PreferenceManager.getDefaultSharedPreferences(this).
@@ -284,8 +292,43 @@ public class MainActivity extends AppCompatActivity
 
     public void reserveRoom(View view)
     {
-        Intent intent = new Intent(this, PickDateActivity.class);
-        startActivity(intent);
+        if(id == 0)
+        {
+            Toast.makeText(this, "Please log in before using this function. Thank you.", Toast.LENGTH_SHORT);
+        }
+        else {
+            List<RoomBooking> allRoomBookings= db.getAllRoomBookings();
+            /*Calendar calendar = Calendar.getInstance();
+            String date = getString(R.string.get_date_from_calendar, String.valueOf(calendar.get(Calendar.MONTH) + 1)
+                    ,String.valueOf(calendar.get(Calendar.DATE))
+                    ,String.valueOf(calendar.get(Calendar.YEAR)));*/
+
+            // Check if student already had a upcoming room booking
+            for(RoomBooking roomBooking : allRoomBookings)
+            {
+                Date date = Calendar.getInstance().getTime();
+                if((date.compareTo(new Date(roomBooking.getmDate())) < 0) && roomBooking.getmStudentId() == id)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Sorry! One student can only have 1 upcoming room reservation.");
+                    builder.setCancelable(false);
+
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    builder.show();
+                    return;
+                }
+
+            }
+
+            Intent intent = new Intent(this, PickDateActivity.class);
+            startActivity(intent);
+
+        }
     }
 
     @Override

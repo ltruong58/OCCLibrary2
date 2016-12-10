@@ -64,8 +64,6 @@ public class PickDateActivity extends AppCompatActivity {
         // get current date
         calendarsList = new ArrayList<>();
 
-        //test
-        Calendar calendar = Calendar.getInstance();
         for(int i = 0; i < 30; i++)
         {
             Calendar nCalendar = Calendar.getInstance();

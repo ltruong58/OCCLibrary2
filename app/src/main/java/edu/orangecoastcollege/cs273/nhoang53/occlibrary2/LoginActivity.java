@@ -49,15 +49,13 @@ public class LoginActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
 
         // database operation
-        ////deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
+        /*deleteDatabase(DBHelper.DATABASE_NAME);
         db.importStudentFromCSV("students.csv");
-        allStudentList = db.getAllStudents();
-        //Log.i("\nOCC Library.", allStudentList.toString());
-
         db.importRoomsFromCSV("rooms.csv");
-        db.importRoomBookingsFromCSV("roomBookings.csv");
+        db.importRoomBookingsFromCSV("roomBookings.csv");*/
 
+        allStudentList = db.getAllStudents();
         mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
         mStudentIdEditText = (EditText) findViewById(R.id.studentIdEditText);
         mLogInButton = (Button) findViewById(R.id.logInButton);

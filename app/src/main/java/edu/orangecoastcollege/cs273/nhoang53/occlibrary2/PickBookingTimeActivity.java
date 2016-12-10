@@ -1,9 +1,11 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ public class PickBookingTimeActivity extends AppCompatActivity {
     private TimePeriodListAdapter periodListAdapter;
     private ListView periodListView;
     private TextView titleTextView;
+    private TextView informTextView;
     private String date;
     private int room;
     @Override
@@ -48,11 +51,22 @@ public class PickBookingTimeActivity extends AppCompatActivity {
         allTimePeriodsList = getAllTimePeriod(date, room, allRoomBookingsList);
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(getString(R.string.pick_period_title));
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        // display the app's menu only in portrait orientation
+        if(orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            informTextView = (TextView) findViewById(R.id.informTextView);
+            informTextView.setText(getString(R.string.inform_text_view, date, room));
+        }
+
         periodListView = (ListView) findViewById(R.id.periodListView);
         periodListAdapter = new TimePeriodListAdapter(this, R.layout.period_list_item, allTimePeriodsList);
 
+
         periodListView.setAdapter(periodListAdapter);
     }
+
 
     public ArrayList<TimePeriod> getAllTimePeriod(String date, int room, List<RoomBooking> allRoomBookingsList)
     {

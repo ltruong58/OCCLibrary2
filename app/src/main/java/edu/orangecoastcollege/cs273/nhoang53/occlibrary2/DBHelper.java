@@ -465,12 +465,12 @@ class DBHelper extends SQLiteOpenHelper {
         return roomBookingsList;
     }
 
-    public void deleteRoomBooking(int studentId) {
+    public void deleteRoomBooking(int bookingId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // DELETE THE TABLE ROW
-        db.delete(DATABASE_ROOM_BOOKING_TABLE, ROOM_BOOKING_FIELD_STUDENT_ID + " = ?",
-                new String[]{String.valueOf(studentId)});
+        db.delete(DATABASE_ROOM_BOOKING_TABLE, ROOM_BOOKING_KEY_FIELD_ID + " = ?",
+                new String[]{String.valueOf(bookingId)});
         db.close();
     }
 
@@ -495,14 +495,14 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public RoomBooking getRoomBooking(int studentId) {
+    public RoomBooking getRoomBooking(int roomBookingId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 DATABASE_ROOM_BOOKING_TABLE,
                 new String[]{ROOM_BOOKING_KEY_FIELD_ID, ROOM_BOOKING_FIELD_ROOM_ID, ROOM_BOOKING_FIELD_STUDENT_ID,
                         ROOM_BOOKING_FIELD_DATE, ROOM_BOOKING_FIELD_START_TIME, ROOM_BOOKING_FIELD_HOURS_USED},
-                ROOM_BOOKING_FIELD_STUDENT_ID + " =?",
-                new String[]{String.valueOf(studentId)},
+                ROOM_BOOKING_KEY_FIELD_ID + " =?",
+                new String[]{String.valueOf(roomBookingId)},
                 null, null, null, null);
 
         if (cursor != null)
