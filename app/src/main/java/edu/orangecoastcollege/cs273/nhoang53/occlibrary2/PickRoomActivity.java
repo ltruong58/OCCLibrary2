@@ -42,8 +42,6 @@ public class PickRoomActivity extends AppCompatActivity {
         allRoomsList = db.getAllRooms();
         allRoomBookingsList = db.getAllRoomBookings();
 
-        // ask Nguyen to get Shared studentID to prevent booking 2 continuous periods.
-
         roomsRange = IS_1_TO_10;
         roomsLayout = (GridLayout) findViewById(R.id.roomsGridLayout);
         nextButton = (ImageButton) findViewById(R.id.pickRoom_nextButton);

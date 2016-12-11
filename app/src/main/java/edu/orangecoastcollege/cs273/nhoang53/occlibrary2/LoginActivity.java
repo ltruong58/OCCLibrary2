@@ -40,7 +40,10 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences splashPrefs;
     private SharedPreferences.Editor editorSplash;
 
-
+    /**
+     * Import data of student, room and rookBooking from CSV file
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +52,15 @@ public class LoginActivity extends AppCompatActivity {
         //setSupportActionBar(toolbar);
 
         // database operation
+        ////deleteDatabase(DBHelper.DATABASE_NAME);
         db = new DBHelper(this);
-        /*deleteDatabase(DBHelper.DATABASE_NAME);
         db.importStudentFromCSV("students.csv");
-        db.importRoomsFromCSV("rooms.csv");
-        db.importRoomBookingsFromCSV("roomBookings.csv");*/
-
         allStudentList = db.getAllStudents();
+        //Log.i("\nOCC Library.", allStudentList.toString());
+
+        db.importRoomsFromCSV("rooms.csv");
+        db.importRoomBookingsFromCSV("roomBookings.csv");
+
         mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
         mStudentIdEditText = (EditText) findViewById(R.id.studentIdEditText);
         mLogInButton = (Button) findViewById(R.id.logInButton);
@@ -80,28 +85,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    /**
+     * Handle login action. It will check if user input correct username and password,
+     * it will create SharedPreferences name "studentId", and then auto go to MainActivity
+     * @param view
+     */
     public void logIn(View view)
     {
         if(!mStudentIdEditText.getText().toString().equals("") && !mPasswordEditText.getText().toString().equals("")) {
@@ -109,18 +97,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (allStudentList.get(i).getId() == Integer.parseInt(mStudentIdEditText.getText().toString())
                         && allStudentList.get(i).getPassword().equals(mPasswordEditText.getText().toString()))
                 {
+                    hideKeyboard(getApplicationContext(), view);
                     mLogInStatusTextView.setText(R.string.login_success);
                     mLogInStatusTextView.setTextColor(getResources().getColor(R.color.colorLoginSuccess));
-
-                    hideKeyboard(getApplicationContext(), view);
-
                     //store data in SharedPreference
                     editor = prefs.edit(); // edit
                     editor.putInt("studentId",allStudentList.get(i).getId());
-                    /*editor.putString("lastName", allStudentList.get(i).getLastName());
-                    editor.putString("firstName", allStudentList.get(i).getFirstName());
-                    editor.putString("password", allStudentList.get(i).getPassword());
-                    editor.putInt("noShowTimes", allStudentList.get(i).getNoShowTimes());*/
                     editor.apply();
 
                     // prevent it go to welcome splash page
@@ -135,12 +117,11 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
 
                     i = allStudentList.size(); // stop the loop
-
                 }
                 else {
                     mLogInStatusTextView.setText(R.string.login_fail);
                     mLogInStatusTextView.setTextColor(getResources().getColor(R.color.colorLoginFail));
-                    mStudentIdNullTextView.requestFocus();
+                    //mStudentIdNullTextView.requestFocus();
                     hideKeyboard(getApplicationContext(), view);
                 }
             }
@@ -161,6 +142,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Clear all field input
+     * @param view
+     */
     public void reset(View view)
     {
         mStudentIdEditText.setText("");
@@ -168,23 +153,14 @@ public class LoginActivity extends AppCompatActivity {
         mLogInStatusTextView.setText("");
     }
 
+    /**
+     * Hide the keyboard after user Click login button
+     * @param context
+     * @param view
+     */
     public void hideKeyboard(Context context, View view)
     {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    @Override
-    protected void onStop() {
-        Log.i("OCC Library. id:", String.valueOf(prefs.getInt("studentId", 0)));
-        /*Log.i("OCC Library. LastName:", prefs.getString("lastName", null));
-        Log.i("OCC Library. FistName:", prefs.getString("firstName", null));
-        Log.i("OCC Library. Password:", prefs.getString("password", null));
-        Log.i("OCC Library. noShow:", String.valueOf(prefs.getInt("noShowTimes", 0)));
-*/
-        /*editor.clear();
-        editor.commit();*/
-
-        super.onStop();
     }
 }

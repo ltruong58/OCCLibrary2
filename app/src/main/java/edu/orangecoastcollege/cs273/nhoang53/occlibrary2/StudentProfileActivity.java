@@ -46,6 +46,11 @@ public class StudentProfileActivity extends AppCompatActivity {
     private String roomReserving;
     private int studentId;
 
+    /**
+     * onCreate will get all information of student base on student ID which store on SharedPreferences.
+     * If student ID = 0, it will redirect user to login activity by use of an Intent
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +126,10 @@ public class StudentProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * It will let student cancel room that he/she reserved with Dialog confirm.
+     * @param view
+     */
     public void cancelRoomReserving(View view)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -146,9 +155,12 @@ public class StudentProfileActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-        //builder.show();
     }
 
+    /**
+     * clear all field at change password section
+     * @param view
+     */
     public void reset (View view)
     {
         oldPasswordEditText.setText("");
@@ -156,6 +168,10 @@ public class StudentProfileActivity extends AppCompatActivity {
         confrimPasswordEditText.setText("");
     }
 
+    /**
+     * Let student change their default password
+     * @param view
+     */
     public void changePassword(View view)
     {
         if(student.getPassword().equals(oldPasswordEditText.getText().toString()))
@@ -172,7 +188,7 @@ public class StudentProfileActivity extends AppCompatActivity {
             {
                 alertTextView.setText(R.string.password_not_match);
                 confirmPasswordWrongTextView.setText("*");
-                Toast.makeText(this, "new password do not match", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "New password do not match", Toast.LENGTH_SHORT).show();
             }
         }
         else

@@ -58,7 +58,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/user4"
+                app:srcCompat="@drawable/student_profile2"
                 android:id="@+id/imageView5"
                 android:clickable="true"
                 android:onClick="studentProfile"
@@ -125,7 +125,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/contact_us"
+                app:srcCompat="@drawable/phone_icon1"
                 android:id="@+id/imageView7"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -134,11 +134,20 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/book2"
+                app:srcCompat="@drawable/book"
                 android:id="@+id/imageView8"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="borrowBook" />
+
+            <!--<ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/book2"
+                android:id="@+id/imageView8"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="borrowBook" />-->
 
         </LinearLayout>
 

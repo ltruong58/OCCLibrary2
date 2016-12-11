@@ -49,4 +49,5 @@
     <string name="welcome_occ_library">Chào mừng bạn đến thư việc OCC</string>
     <string name="welcome_screen">Màn hình chào mừng</string>
     <string name="welcome_screen_description">Mở hoặc đóng màn hình chào mừng</string>
+    <string name="flashlight">Đèn pin</string>
 </resources>

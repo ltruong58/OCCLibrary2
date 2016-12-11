@@ -15,6 +15,10 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
 
     private GoogleMap mGoogleMap;
 
+    /**
+     * Create a mapFragment
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +28,16 @@ public class ContactActivity extends AppCompatActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Display map with OCC library marker
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
-        LatLng OCCLibrary = new LatLng(33.672534,-117.907814);
+        LatLng OCCLibrary = new LatLng(33.6689423,-117.9128743);
         mGoogleMap.addMarker(new MarkerOptions().title("OCC Library").position(OCCLibrary));
-        //mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(OCCLibrary, 14.5f));
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(OCCLibrary, 14.5f), 2000, null); //move in 2sec
     }
 }

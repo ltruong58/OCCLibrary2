@@ -27,6 +27,7 @@
     <string name="borrow_book">Borrow Book</string>
     <string name="welcome">WELCOME TO OCC LIBRARY</string>
     <string name="not_login">* <u>You MUST login to use all library functions. Click to login.</u></string>
+    <string name="flashlight">Flashlight</string>
 
     <!-- Student Profile activity -->
     <string name="student_information">Student Information</string>

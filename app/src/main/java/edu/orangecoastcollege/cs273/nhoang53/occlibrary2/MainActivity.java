@@ -19,10 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
+/**
+ * Main activity
+ */
 public class MainActivity extends AppCompatActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -41,11 +41,15 @@ public class MainActivity extends AppCompatActivity
     private DBHelper db;
     private Student student;
 
+    /**
+     *  onCreate generates the layout when its View is created.
+     *  Check the login status on SharedPreferences
+     * @param savedInstanceState any saved state to restore in
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         // go to SplashActivity
         splashSharedPrefs = getSharedPreferences(SPLASH_PREF, 0);
@@ -60,13 +64,7 @@ public class MainActivity extends AppCompatActivity
         {
             editorSplash.putInt("splash", 0); // put it back to 0, so it will splash next time
             editorSplash.apply();
-            //Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         }
-        db = new DBHelper(this);
-        /*deleteDatabase(DBHelper.DATABASE_NAME);
-        db.importStudentFromCSV("students.csv");
-        db.importRoomsFromCSV("rooms.csv");
-        db.importRoomBookingsFromCSV("roomBookings.csv");*/
 
         /*PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         PreferenceManager.getDefaultSharedPreferences(this).
@@ -95,18 +93,29 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * start the application
+     */
     @Override
     protected void onStart() {
         super.onStart();
     }
 
-    // login
+    /**
+     * call the login activity
+     * @param view
+     */
     public void login(View view)
     {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * It will call the login activity if student haven't login yet.
+     * Otherwise, it will call student profile activity
+     * @param view
+     */
     public void studentProfile(View view)
     {
         if(id == 0)
@@ -119,39 +128,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * stop the application
+     */
     @Override
     protected void onStop() {
-        /*editor.remove("studentId");
-        editor.remove("lastName");
-        editor.remove("firstName");
-        editor.remove("noShowTimes");*/
-
-        /*editor.clear();
-        editor.apply();*/
-
         super.onStop();
     }
 
+    /**
+     *  onResume is call when user go back to MainActivity
+     *  It will turn on or off the SplashActivity
+     *  Register the SharedPreference listener
+     */
     @Override
     protected void onResume()
     {
-        //Toast.makeText(this, "Preference changed onResume()", Toast.LENGTH_SHORT).show();
         // This work on Portrait
         settingPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean switchPrefs = settingPrefs.getBoolean("splashPrefs", true);
         if(!switchPrefs) //if not true
         {
-            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
             editorSplash.putInt("splash", -1);
             editorSplash.apply();
-            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         }
         else
         {
             if(splashSharedPrefs.getInt("splash", 0) == -1) {
                 editorSplash.putInt("splash", 0);
                 editorSplash.apply();
-                Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
             }
         }
         super.onResume();
@@ -159,31 +164,32 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
+    /**
+     * unregister SharePreferences listener
+     */
     @Override
     protected void onPause() {
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
-    // Setting menu
+    /**
+     * Show the Menu option setting
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
-
-        //get the device's current orientation
-        /*int orientation = getResources().getConfiguration().orientation;
-        if(orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.menu, menu);
-            return true;
-        }
-        else
-            return false;*/
     }
 
-    // to change value in Menu item
+    /**
+     * Control the Options Menu setting. It will change menu title to Login or Logout
+     * It also remove setting option on landscape orientated.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
@@ -199,6 +205,12 @@ public class MainActivity extends AppCompatActivity
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /**
+     * Depend on what option user click. It will go to setting activity or login activity
+     * or logout.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -260,18 +272,24 @@ public class MainActivity extends AppCompatActivity
                 }
             };*/
 
-    // Contact Us
+    /**
+     * Start ContactActivity by use of an Intent (no data passed)
+     * @param view
+     */
     public void contactUs(View view)
     {
         Intent intent = new Intent(this, ContactActivity.class);
         startActivity(intent);
     }
 
-    // Up coming activity
+    /**
+     * Pop-up Alert dialog because this function haven't set up yet.
+     * @param view
+     */
     public void borrowBook(View view)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This function comming soon");
+        builder.setMessage("This function coming soon");
         builder.setCancelable(false);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -290,67 +308,37 @@ public class MainActivity extends AppCompatActivity
      * Long Truong
      */
 
+    /**
+     * Letting user reserve room with PickDateActivity by use of an Intent (no data passed)
+     * @param view
+     */
     public void reserveRoom(View view)
     {
-        if(id == 0)
-        {
-            Toast.makeText(this, "Please log in before using this function. Thank you.", Toast.LENGTH_SHORT);
-        }
-        else {
-            List<RoomBooking> allRoomBookings= db.getAllRoomBookings();
-            /*Calendar calendar = Calendar.getInstance();
-            String date = getString(R.string.get_date_from_calendar, String.valueOf(calendar.get(Calendar.MONTH) + 1)
-                    ,String.valueOf(calendar.get(Calendar.DATE))
-                    ,String.valueOf(calendar.get(Calendar.YEAR)));*/
-
-            // Check if student already had a upcoming room booking
-            for(RoomBooking roomBooking : allRoomBookings)
-            {
-                Date date = Calendar.getInstance().getTime();
-                if((date.compareTo(new Date(roomBooking.getmDate())) < 0) && roomBooking.getmStudentId() == id)
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage("Sorry! One student can only have 1 upcoming room reservation.");
-                    builder.setCancelable(false);
-
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-                    builder.show();
-                    return;
-                }
-
-            }
-
-            Intent intent = new Intent(this, PickDateActivity.class);
-            startActivity(intent);
-
-        }
+        Intent intent = new Intent(this, PickDateActivity.class);
+        startActivity(intent);
     }
 
+    /**
+     * Listener to handle changes in setting of the app's shared preferences (preferences.xml)
+     * If the switch preference are changed, it will change the SharedPreferences to turn on or off splashActivity
+     * @param sharedPreferences
+     * @param key
+     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        //Toast.makeText(this, "Preference changed.", Toast.LENGTH_SHORT).show();
-
         settingPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean switchPrefs = settingPrefs.getBoolean("splashPrefs", true);
         if(!switchPrefs) //if not true
         {
-            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
             editorSplash.putInt("splash", -1);
             editorSplash.apply();
-            Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
         }
         else
         {
             if(splashSharedPrefs.getInt("splash", 0) == -1) {
                 editorSplash.putInt("splash", 0);
                 editorSplash.apply();
-                Log.i("\nOCC Library. splash:", String.valueOf(splashSharedPrefs.getInt("splash", 0)));
             }
         }
 

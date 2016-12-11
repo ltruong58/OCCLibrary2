@@ -31,17 +31,14 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_STUDENT_TABLE = "Student";
     private static final int DATABASE_VERSION = 1;
 
-
-
-
-    //TASK 2: DEFINE THE FIELDS (COLUMN NAMES) FOR THE BOOK TABLE
+    /*//TASK 2: DEFINE THE FIELDS (COLUMN NAMES) FOR THE BOOK TABLE
     private static final String BOOK_KEY_FIELD_ID = "id";
     private static final String BOOK_FIELD_TITLE = "title";
     private static final String BOOK_FIELD_DESCRIPTION = "description";
     private static final String BOOK_FIELD_AUTHOR = "author";
     private static final String BOOK_FIELD_ISBN = "isbn";
     private static final String BOOK_FIELD_QTY_AVAIL = "quantity";
-    private static final String BOOK_FIELD_IMAGE_URI = "image_uri";
+    private static final String BOOK_FIELD_IMAGE_URI = "image_uri";*/
 
     // DEFINE THE FIELDS (COLUMN NAMES) FOR THE ROOM TABLE
     private static final String ROOM_KEY_FIELD_ID = "id";
@@ -64,15 +61,22 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_FIELD_PASSWORD = "password";
     private static final String KEY_FIELD_NO_SHOW_TIMES = "no_show_times";
 
+    /**
+     * Default constructor that get Context from activity, create database name and version.
+     * @param context
+     */
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
     }
 
-
+    /**
+     *  Create data table: room. room booking, student
+     * @param sqLiteDatabase
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // BOOK
+/*        // BOOK
         String table = "CREATE TABLE " + DATABASE_BOOK_TABLE + "("
                 + BOOK_KEY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BOOK_FIELD_TITLE + " TEXT, "
@@ -81,10 +85,10 @@ class DBHelper extends SQLiteOpenHelper {
                 + BOOK_FIELD_ISBN + " INTEGER, "
                 + BOOK_FIELD_QTY_AVAIL + " INTEGER, "
                 + BOOK_FIELD_IMAGE_URI + " TEXT" + ")";
-        sqLiteDatabase.execSQL (table);
+        sqLiteDatabase.execSQL (table);*/
 
         // ROOM
-        table = "CREATE TABLE " + DATABASE_ROOM_TABLE + "("
+        String table = "CREATE TABLE " + DATABASE_ROOM_TABLE + "("
                 + ROOM_KEY_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ROOM_FIELD_NAME + " TEXT, "
                 + ROOM_FIELD_DESCRIPTION + " TEXT, "
@@ -116,6 +120,12 @@ class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Delete Data tables if their already exists in the phone, then create new data tables.
+     * @param sqLiteDatabase
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
@@ -128,7 +138,12 @@ class DBHelper extends SQLiteOpenHelper {
     }
 
     //******* import data from csv file ********
-    // ROOM
+
+    /**
+     * import data for Room table in the CSV file
+     * @param csvFileName
+     * @return
+     */
     public boolean importRoomsFromCSV(String csvFileName) {
         AssetManager manager = mContext.getAssets();
         InputStream inStream;
@@ -160,7 +175,12 @@ class DBHelper extends SQLiteOpenHelper {
         }
         return true;
     }
-    // STUDENT
+
+    /**
+     * Import data for Student table from CSV file
+     * @param csvFileName
+     * @return
+     */
     public boolean importStudentFromCSV(String csvFileName)
     {
         AssetManager am = mContext.getAssets();
@@ -199,7 +219,12 @@ class DBHelper extends SQLiteOpenHelper {
         }
         return true;
     }
-    // ROOM BOOKING
+
+    /**
+     * import data for Room Booking table from CSV file
+     * @param csvFileName
+     * @return
+     */
     public boolean importRoomBookingsFromCSV(String csvFileName) {
         AssetManager manager = mContext.getAssets();
         InputStream inStream;
@@ -234,10 +259,13 @@ class DBHelper extends SQLiteOpenHelper {
         }
         return true;
     }
-    // BOOK
 
     //********* STUDENT TABLE OPERATIONS: ADD, GET 1, GET ALL, UPDATE, DELETE **********
 
+    /**
+     * insert student into Student table
+     * @param student
+     */
     public void addStudent(Student student)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -253,6 +281,10 @@ class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    /**
+     * Get all students in Student table and put it in ArrayList
+     * @return ArrayList<Student>
+     */
     public ArrayList<Student> getAllStudents(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Student> studentsList = new ArrayList<>();
@@ -273,7 +305,7 @@ class DBHelper extends SQLiteOpenHelper {
         return studentsList;
     }
 
-    public void updateNoShowTimes(Student student)
+    /*public void updateNoShowTimes(Student student)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -282,26 +314,32 @@ class DBHelper extends SQLiteOpenHelper {
         db.update(DATABASE_STUDENT_TABLE, values, KEY_FIELD_ID + " =?",
                 new String[] {String.valueOf(student.getId())});
         db.close();
-    }
+    }*/
 
+    /**
+     * get all information of Student base on studentId
+     * @param studentId
+     * @return Student
+     */
     public Student getStudent(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(DATABASE_STUDENT_TABLE,
                 new String[]{KEY_FIELD_ID, KEY_FIELD_LAST_NAME, KEY_FIELD_FIRST_NAME, KEY_FIELD_PASSWORD, KEY_FIELD_NO_SHOW_TIMES},
                 KEY_FIELD_ID + "=?",
                 new String[]{String.valueOf(studentId)}, null, null, null, null);
-        /*if(cursor != null)
-        {
-            cursor.moveToFirst();
-        }
-
-        Student student = new Student(cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getInt(4));*/
 
         Student student = null;
+        if(cursor != null)
+        {
+            cursor.moveToFirst();
+            student = new Student(cursor.getInt(0),
+                                cursor.getString(1),
+                                cursor.getString(2),
+                                cursor.getString(3),
+                                cursor.getInt(4));
+        }
+
+        /*Student student = null;
         if (cursor.moveToFirst()) {
             do {
                 student = new Student(cursor.getInt(0),
@@ -310,13 +348,17 @@ class DBHelper extends SQLiteOpenHelper {
                         cursor.getString(3),
                         cursor.getInt(4));
             } while (cursor.moveToNext());
-        }
-
+        }*/
 
         db.close();
         return student;
     }
 
+    /**
+     * Change student with the newPassword
+     * @param studentId
+     * @param newPassword
+     */
     public void changePassword(int studentId, String newPassword)
     {
         SQLiteDatabase db = this.getWritableDatabase();
