@@ -1,7 +1,10 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +46,14 @@ public class PickDateActivity extends AppCompatActivity {
     private ArrayList<Calendar> calendarsList;
     private TextView datesRangeTextView;
 
+    // Reference to the SensorManager
+    private SensorManager sensorManager;
+
+    //Reference to the accelerometer
+    private Sensor accelerometer;
+
+    private ShakeDetector shakeDetector;
+
     /** Set up all elements for activity
      * @param savedInstanceState
      */
@@ -77,11 +88,40 @@ public class PickDateActivity extends AppCompatActivity {
 
         datesRangeTextView.setText(getString(R.string.dates_range,getDateStringDisplay(calendarsList.get(0)),getDateStringDisplay(calendarsList.get(calendarsList.size() - 1))));
 
+        //
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        shakeDetector = new ShakeDetector(new ShakeDetector.OnShakeListener() {
+            @Override
+            public void onShake() {
+                datesRange++;
+                if(datesRange > IS_21_TO_30)
+                {
+                    datesRange = IS_1_TO_10;
+                }
+                // update views
+                showDateOnTable( datesRange, calendarsList);
+            }
+        });
+
         // update views
         showDateOnTable( datesRange, calendarsList);
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Start the
+        sensorManager.registerListener(shakeDetector, accelerometer, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(shakeDetector);
+    }
 
     /** Get a string of date to display in room layout from input calendar object
      * @param calendar store a date needed to display

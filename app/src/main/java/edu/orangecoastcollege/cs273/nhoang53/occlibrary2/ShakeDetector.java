@@ -5,7 +5,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-/**
+/** Shake Detector for shake event
  * Created by ltruong58 on 10/27/2016.
  */
 

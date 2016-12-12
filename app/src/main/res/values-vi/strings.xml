@@ -53,7 +53,6 @@
     <string name="details">"Bạn đã đăng kí mượn phòng thành công. Bên dưới là thông tin đăng kí phòng của bạn: \\n Tên sinh viên: %1$s \\n Ngày chọn: %2$s \\n     Phòng chọn: %3$s \\n     Giờ bắt đầu: %4$s \\n     Giờ kết thúc: %5$s \\n     Cám ơn đã sử dụng dịch vụ. "</string>
     <string name="ask_hours_used_text_view">Bạn sẽ dùng phòng học trong bao lâu?</string>
     <string name="ask_start_time_text_view">Bạn muốn dùng phòng học từ lúc nào?</string>
-    <string name="dates_range">Từ %1$s đến %2$s</string>
     <string name="get_date_from_calendar">%1$s/%2$s/%3$s</string>
     <string name="inform_text_view">Ngày đã chọn: %1$s\\Phòng đã chọn: %2$d</string>
     <string name="not_login_click_button_error">Xin vui lòng đăng nhập trước khi xử dụng dịch vụ này.</string>
@@ -70,7 +69,6 @@
     <string name="flashlight">Đèn pin</string>
     <string name="cancel">Hủy bỏ</string>
     <string name="change">Lưu thay đổi</string>
-    <string name="dates_range"></string>
     <string name="reset">Làm lại</string>
-    <string name="title_activity_contact">Bản đồ</string>
+    <string name="dates_range">Từ %1$s đến %2$s</string>
 </resources>
