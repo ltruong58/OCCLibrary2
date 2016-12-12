@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -15,9 +17,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private boolean preferencesChanged = true;
 
     private TextView mNotLoginTextView;
+    private ImageView bannerImageView;
+    int bannerChange;
     int id;
     private DBHelper db;
     private Student student;
@@ -71,6 +80,8 @@ public class MainActivity extends AppCompatActivity
                 registerOnSharedPreferenceChangeListener(preferenceChangeListener);*/
 
         mNotLoginTextView = (TextView) findViewById(R.id.notLoginTextView);
+        bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
+        bannerChange = 1;
 
         // Restore preferences
 
@@ -302,6 +313,50 @@ public class MainActivity extends AppCompatActivity
         /*AlertDialog alert = builder.create();
         alert.show();*/
         builder.show();
+    }
+
+    /**
+     * Change image of the banner, then shake the image left and right.
+     * @param view
+     */
+    public void toggleShakeAnim(View view)
+    {
+        AssetManager am = this.getAssets();
+        bannerChange %= 3;
+        if(bannerChange == 1)
+        {
+            try {
+                InputStream stream = am.open("occ_library_banner_2.jpg");
+                Drawable drawable = Drawable.createFromStream(stream, "occ_library_banner_2.jpg");
+                bannerImageView.setImageDrawable(drawable);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(bannerChange == 2)
+        {
+            try {
+                InputStream stream = am.open("occ_library_banner_3.jpg");
+                Drawable drawable = Drawable.createFromStream(stream, "occ_library_banner_3.jpg");
+                bannerImageView.setImageDrawable(drawable);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            try {
+                InputStream stream = am.open("occ_library_banner.png");
+                Drawable drawable = Drawable.createFromStream(stream, "occ_library_banner.png");
+                bannerImageView.setImageDrawable(drawable);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        bannerChange++;
+
+        Animation shake = AnimationUtils.loadAnimation(this,R.anim.shake_anim);
+        bannerImageView.startAnimation(shake);
     }
 
     /**

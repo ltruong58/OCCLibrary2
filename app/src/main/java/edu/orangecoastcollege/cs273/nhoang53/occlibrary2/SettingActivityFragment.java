@@ -1,16 +1,14 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
 import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class SettingActivityFragment extends PreferenceFragment {
+    /**
+     * Create option menu from XML preferences file
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

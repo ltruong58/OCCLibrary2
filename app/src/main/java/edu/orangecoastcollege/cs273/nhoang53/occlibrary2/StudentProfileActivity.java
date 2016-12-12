@@ -24,7 +24,6 @@ public class StudentProfileActivity extends AppCompatActivity {
     private TextView idTextView;
     private TextView lastNameTextView;
     private TextView firstNameTextView;
-    private TextView noShowTimesTextView;
     private TextView roomReservingTextView;
     private TextView bookBorrowTextView;
     private TextView alertTextView;
@@ -62,7 +61,6 @@ public class StudentProfileActivity extends AppCompatActivity {
         idTextView = (TextView) findViewById(R.id.idTextView);
         lastNameTextView = (TextView) findViewById(R.id.lastNameTextView);
         firstNameTextView = (TextView) findViewById(R.id.firstNameTextView);
-        noShowTimesTextView = (TextView) findViewById(R.id.noShowTimesTextView);
         roomReservingTextView = (TextView) findViewById(R.id.roomReservingTextView);
         bookBorrowTextView = (TextView) findViewById(R.id.bookBorrowTextView);
         alertTextView = (TextView) findViewById(R.id.alertTextView);
@@ -73,7 +71,7 @@ public class StudentProfileActivity extends AppCompatActivity {
         newPasswordEditText = (EditText) findViewById(R.id.newPasswordEditText);
         confrimPasswordEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
 
-        roomReservingCancelButton = (Button) findViewById(R.id.roomReservingCancelButton);
+        roomReservingCancelButton = (Button) findViewById(R.id.roomReservingCancel);
         resetButton = (Button) findViewById(R.id.resetButton);
         savePasswordButton = (Button) findViewById(R.id.savePasswordButton);
 
@@ -88,7 +86,6 @@ public class StudentProfileActivity extends AppCompatActivity {
             idTextView.setText(String.valueOf(student.getId()));
             lastNameTextView.setText(student.getLastName());
             firstNameTextView.setText(student.getFirstName());
-            noShowTimesTextView.setText(String.valueOf(student.getNoShowTimes()));
 
             // get room name
             List<RoomBooking> roomBookings = db.getAllRoomBookings();
