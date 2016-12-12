@@ -19,7 +19,7 @@ import java.util.List;
 
 
 /**
- * Helper class to provide custom adapter for the <code>Offering</code> list.
+ * Helper class to provide custom adapter for the <code>TimePeriod</code> list.
  */
 public class TimePeriodListAdapter extends ArrayAdapter<TimePeriod> {
 
@@ -27,10 +27,8 @@ public class TimePeriodListAdapter extends ArrayAdapter<TimePeriod> {
     private List<TimePeriod> mTimePeriodsList = new ArrayList<>();
     private int mResourceId;
 
-
-
     /**
-     * Creates a new <code>OfferingListAdapter</code> given a mContext, resource id and list of offerings.
+     * Creates a new <code>TimePeriodListAdapter</code> given a mContext, resource id and list of offerings.
      *
      * @param c The mContext for which the adapter is being used (typically an activity)
      * @param rId The resource id (typically the layout file name)
@@ -88,7 +86,7 @@ public class TimePeriodListAdapter extends ArrayAdapter<TimePeriod> {
 
         // Set color
         Drawable background = ContextCompat.getDrawable(mContext, R.drawable.empty_background);
-        boolean status = selectedTimePeriod.isBooked();
+        boolean status = selectedTimePeriod.getStatus();
         if (!status) {
 
             background = ContextCompat.getDrawable(mContext, R.drawable.empty_background);

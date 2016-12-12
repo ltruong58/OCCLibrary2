@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.PickTimePeriodDetails"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:background="@color/colorBackGround">
 
     <TextView
         android:text="@string/pick_time_details_title"
@@ -19,6 +20,8 @@
         android:id="@+id/textView51"
         android:layout_weight="1"
         android:textAlignment="center"
+        android:textColor="@color/title"
+        android:textStyle="normal|bold"
         android:textSize="24sp" />
 
     <TextView
@@ -45,7 +48,7 @@
         android:layout_weight="2">
 
         <TextView
-            android:text="What time do you want to reserve the room ?"
+            android:text="@string/ask_start_time_text_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/startTimeQuestionTextView"
@@ -61,7 +64,7 @@
     </LinearLayout>
 
     <TextView
-        android:text="How long will you use this room?"
+        android:text="@string/ask_hours_used_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/askHoursTextView"
@@ -99,7 +102,7 @@
     </LinearLayout>
 
     <Button
-        android:text="Submit"
+        android:text="@string/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"

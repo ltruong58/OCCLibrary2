@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -96,7 +95,7 @@ public class StudentProfileActivity extends AppCompatActivity {
             Date date= Calendar.getInstance().getTime();
             for(RoomBooking booking : roomBookings)
             {
-                if(booking.getmStudentId() == studentId && (date.compareTo(new Date(booking.getmDate())) < 0))
+                if(booking.getStudentId() == studentId && (date.compareTo(new Date(booking.getDate())) < 0))
                 {
                     roomBooking = booking;
                 }
@@ -104,9 +103,9 @@ public class StudentProfileActivity extends AppCompatActivity {
             //roomBooking = db.getRoomBooking(studentId);
             if(roomBooking != null)
             {
-                room = db.getRoom(roomBooking.getmRoomId());
+                room = db.getRoom(roomBooking.getRoomId());
                 if (room != null) {
-                    roomReservingTextView.setText(room.getmName());
+                    roomReservingTextView.setText(room.getName());
                     roomReservingTextView.setTag(roomBooking);
                 }
                 else
@@ -140,7 +139,7 @@ public class StudentProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 RoomBooking roomBooking = (RoomBooking) roomReservingTextView.getTag();
-                db.deleteRoomBooking(roomBooking.getmId());
+                db.deleteRoomBooking(roomBooking.getId());
                 startActivity(getIntent());
                 finish();
             }

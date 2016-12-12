@@ -374,10 +374,10 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_KEY_FIELD_ID, room.getmId());
-        values.put(ROOM_FIELD_NAME, room.getmName());
-        values.put(ROOM_FIELD_DESCRIPTION, room.getmDescription());
-        values.put(ROOM_FIELD_CAPACITY, room.getmCapacity());
+        values.put(ROOM_KEY_FIELD_ID, room.getId());
+        values.put(ROOM_FIELD_NAME, room.getName());
+        values.put(ROOM_FIELD_DESCRIPTION, room.getDescription());
+        values.put(ROOM_FIELD_CAPACITY, room.getCapacity());
 
         db.insert(DATABASE_ROOM_TABLE, null, values);
 
@@ -410,7 +410,7 @@ class DBHelper extends SQLiteOpenHelper {
 
         // DELETE THE TABLE ROW
         db.delete(DATABASE_ROOM_TABLE, ROOM_KEY_FIELD_ID + " = ?",
-                new String[]{String.valueOf(room.getmId())});
+                new String[]{String.valueOf(room.getId())});
         db.close();
     }
 
@@ -424,12 +424,12 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_FIELD_NAME, room.getmName());
-        values.put(ROOM_FIELD_DESCRIPTION, room.getmDescription());
-        values.put(ROOM_FIELD_CAPACITY, room.getmCapacity());
+        values.put(ROOM_FIELD_NAME, room.getName());
+        values.put(ROOM_FIELD_DESCRIPTION, room.getDescription());
+        values.put(ROOM_FIELD_CAPACITY, room.getCapacity());
 
         db.update(DATABASE_ROOM_TABLE, values, ROOM_KEY_FIELD_ID + " = ?",
-                new String[]{String.valueOf(room.getmId())});
+                new String[]{String.valueOf(room.getId())});
         db.close();
     }
 
@@ -469,12 +469,12 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        //values.put(ROOM_BOOKING_KEY_FIELD_ID, roomBooking.getmId());
-        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getmRoomId());
-        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getmStudentId());
-        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getmDate());
-        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getmStartTime());
-        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getmHoursUsed());
+        //values.put(ROOM_BOOKING_KEY_FIELD_ID, roomBooking.getId());
+        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getRoomId());
+        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getStudentId());
+        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getDate());
+        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getStartTime());
+        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getHoursUsed());
 
         db.insert(DATABASE_ROOM_BOOKING_TABLE, null, values);
 
@@ -526,14 +526,14 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getmRoomId());
-        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getmStudentId());
-        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getmDate());
-        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getmStartTime());
-        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getmHoursUsed());
+        values.put(ROOM_BOOKING_FIELD_ROOM_ID, roomBooking.getRoomId());
+        values.put(ROOM_BOOKING_FIELD_STUDENT_ID, roomBooking.getStudentId());
+        values.put(ROOM_BOOKING_FIELD_DATE, roomBooking.getDate());
+        values.put(ROOM_BOOKING_FIELD_START_TIME, roomBooking.getStartTime());
+        values.put(ROOM_BOOKING_FIELD_HOURS_USED, roomBooking.getHoursUsed());
 
         db.update(DATABASE_ROOM_BOOKING_TABLE, values, ROOM_BOOKING_KEY_FIELD_ID + " = ?",
-                new String[]{String.valueOf(roomBooking.getmId())});
+                new String[]{String.valueOf(roomBooking.getId())});
         db.close();
     }
 

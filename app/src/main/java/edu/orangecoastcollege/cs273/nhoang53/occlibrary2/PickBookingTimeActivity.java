@@ -5,11 +5,8 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.sql.Time;
@@ -18,6 +15,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Select an available period of selected room and date.
+ *  Then go to pick a detail starting time and number of hours uses
+ */
 public class PickBookingTimeActivity extends AppCompatActivity {
 
     private static final String LIBRARY_OPENING_TIME = "7:00:00";
@@ -26,8 +27,6 @@ public class PickBookingTimeActivity extends AppCompatActivity {
     private static final boolean NOT_BOOKED = false;
 
     private DBHelper db;
-    //private List<Room> allRoomsList;
-    //private List<Student> allStudentsList;
     private List<RoomBooking> allRoomBookingsList;
     private List<TimePeriod> allTimePeriodsList;
     private TimePeriodListAdapter periodListAdapter;
@@ -36,6 +35,10 @@ public class PickBookingTimeActivity extends AppCompatActivity {
     private TextView informTextView;
     private String date;
     private int room;
+
+    /** Set up all elements for activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class PickBookingTimeActivity extends AppCompatActivity {
 
         int orientation = getResources().getConfiguration().orientation;
 
-        // display the app's menu only in portrait orientation
+        // display the information along with the list view in landscape mode
         if(orientation == Configuration.ORIENTATION_LANDSCAPE) {
             informTextView = (TextView) findViewById(R.id.informTextView);
             informTextView.setText(getString(R.string.inform_text_view, date, room));
@@ -62,19 +65,23 @@ public class PickBookingTimeActivity extends AppCompatActivity {
 
         periodListView = (ListView) findViewById(R.id.periodListView);
         periodListAdapter = new TimePeriodListAdapter(this, R.layout.period_list_item, allTimePeriodsList);
-
-
         periodListView.setAdapter(periodListAdapter);
     }
 
 
-    public ArrayList<TimePeriod> getAllTimePeriod(String date, int room, List<RoomBooking> allRoomBookingsList)
+    /** get all the list of periods and theirs status
+     * @param date
+     * @param room
+     * @param allRoomBookingsList
+     * @return
+     */
+    private ArrayList<TimePeriod> getAllTimePeriod(String date, int room, List<RoomBooking> allRoomBookingsList)
     {
         // filter the booking in specific date and room
         List<RoomBooking> filterRoomBookingsList = new ArrayList<>();
         for(RoomBooking roomBooking : allRoomBookingsList)
         {
-            if(roomBooking.getmDate().equals(date) && roomBooking.getmRoomId() == room)
+            if(roomBooking.getDate().equals(date) && roomBooking.getRoomId() == room)
             {
                 filterRoomBookingsList.add(roomBooking);
             }
@@ -91,13 +98,13 @@ public class PickBookingTimeActivity extends AppCompatActivity {
         // Make a list of time period.
         ArrayList<TimePeriod> timePeriods = new ArrayList<>();
         String startTime = LIBRARY_OPENING_TIME;
-        String endTime = LIBRARY_CLOSING_TIME;
+        String endTime;
         boolean isBooked = NOT_BOOKED;
 
         for(RoomBooking roomBooking : filterRoomBookingsList)
         {
             // Set end time for the gap
-            endTime = roomBooking.getmStartTime();
+            endTime = roomBooking.getStartTime();
 
             // Create time period for the gap between 2 booking if exists
             if(!startTime.equals(endTime))
@@ -113,7 +120,7 @@ public class PickBookingTimeActivity extends AppCompatActivity {
                 startTime = endTime;
 
                 // Set end time
-                float duration = roomBooking.getmHoursUsed();
+                float duration = roomBooking.getHoursUsed();
                 Time temp = Time.valueOf(endTime);
                 endTime = new Time(temp.getTime() + (long)(duration*60*60*1000)).toString();
                 if(endTime.charAt(0) == '0')
@@ -139,6 +146,9 @@ public class PickBookingTimeActivity extends AppCompatActivity {
         return timePeriods;
     }
 
+    /**  onClick() event for selected period item in list view
+     * @param view
+     */
     public void pickTimePeriodDetails(View view)
     {
         if(view instanceof LinearLayout) {

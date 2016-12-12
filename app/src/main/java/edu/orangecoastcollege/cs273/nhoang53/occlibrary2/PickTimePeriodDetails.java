@@ -2,6 +2,7 @@ package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,21 +18,34 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/** pick a detail starting time and number of hours uses
+ *  and submit the room booking, then go to booking details
+ *  to review all booking information
+ *
+ */
 public class PickTimePeriodDetails extends AppCompatActivity {
 
+    private final double MINIMUM_HOURS = 0.5;
     private TextView selectedRoomTextView;
     private TextView selectedDateTextView;
     private TextView seekBarTextView;
     private Spinner pickTimeSpinner;
     private SeekBar hoursSeekBar;
+
     private String date;
     private int room;
     private DBHelper db;
-    private SharedPreferences prefs;
+    private SharedPreferences prefs; // store studentID from login activity
+
+    /** Set up all elements for activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_time_period_details);
+
+        db = new DBHelper(this);
 
         selectedDateTextView = (TextView) findViewById(R.id.selectedDateTextView);
         selectedRoomTextView = (TextView) findViewById(R.id.selectedRoomTextView);
@@ -44,7 +58,7 @@ public class PickTimePeriodDetails extends AppCompatActivity {
         TimePeriod timePeriod = intentFromPickBookingTimeActivity.getExtras().getParcelable("SelectedPeriod");
 
         // Update TextView
-        selectedRoomTextView.setText(getString(R.string.selected_room_text_view, room));
+        selectedRoomTextView.setText(getString(R.string.selected_room_text_view, db.getRoom(room).getName()));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         try {
             Date ddate = sdf.parse(date);
@@ -53,24 +67,29 @@ public class PickTimePeriodDetails extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        sdf = new SimpleDateFormat("HH:mm");
-
         // Spinner
         pickTimeSpinner = (Spinner) findViewById(R.id.pickTimeSpinner);
         addItemsOnSpinner(pickTimeSpinner, timePeriod);
 
         // SeekView
         hoursSeekBar.setOnSeekBarChangeListener(hoursChangeListener);
+        hoursSeekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
     }
 
-    public void addItemsOnSpinner(Spinner spinner, TimePeriod timePeriod) {
+    /** add start time options into spinner
+     * @param spinner
+     * @param timePeriod
+     */
+    private void addItemsOnSpinner(Spinner spinner, TimePeriod timePeriod) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
-        double duration = 0.5;
+        double duration = MINIMUM_HOURS;
         List<String> list = new ArrayList<>();
-        //String sTime;
-        Time tStartTime = new Time(Time.valueOf(timePeriod.getStartTime()).getTime());
+
+        Time tStartTime = Time.valueOf(timePeriod.getStartTime());
         Time tEndTime = Time.valueOf(timePeriod.getEndTime());
+
+        // add new start time after every 30' until 30' before ending time of period
         while (tStartTime.getTime() < (tEndTime.getTime() ))
         {
             list.add(sdf.format(tStartTime));
@@ -83,14 +102,20 @@ public class PickTimePeriodDetails extends AppCompatActivity {
         spinner.setAdapter(dataAdapter);
     }
 
+    /**
+     * seek bar listener
+     */
     private SeekBar.OnSeekBarChangeListener hoursChangeListener = new SeekBar.OnSeekBarChangeListener() {
         int stepSize = 30;
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-            int totalMinutes = progress + 30;
+            int totalMinutes = progress + stepSize;
             int hour = totalMinutes / 60;
             int minute = totalMinutes % 60;
+
+            // update seek bar text view
             seekBarTextView.setText(String.format("%02d", hour) + ":" + String.format("%02d", minute));
+
             progress = ((int)Math.round(progress/stepSize))*stepSize;
             seekBar.setProgress(progress);
 
@@ -106,6 +131,11 @@ public class PickTimePeriodDetails extends AppCompatActivity {
 
         }
     };
+
+    /** add booking to database and go to roomBookingDetailsActivity to show booking information
+     * @param view
+     * @throws ParseException
+     */
     public void showRoomBookingDetails(View view) throws ParseException {
         // Get login studentID
         prefs = getSharedPreferences(MainActivity.STUDENT_PREFS, 0);

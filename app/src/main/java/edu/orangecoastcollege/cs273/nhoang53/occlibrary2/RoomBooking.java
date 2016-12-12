@@ -2,12 +2,11 @@ package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.format.Time;
-import android.util.Log;
 
 import java.util.Date;
 
-/**
+/** Room Booking database
+ * Store Room Booking information
  * Created by Long Truong on 11/27/2016.
  */
 
@@ -20,6 +19,14 @@ public class RoomBooking implements Parcelable{
     private String mStartTime;
     private float mHoursUsed;
 
+    /** Constructor
+     * @param mId
+     * @param mRoomId
+     * @param mStudentId
+     * @param mDate
+     * @param mStartTime
+     * @param mHoursUsed
+     */
     public RoomBooking(int mId, int mRoomId, int mStudentId, String mDate, String mStartTime, float mHoursUsed) {
         this.mId = mId;
         this.mRoomId = mRoomId;
@@ -29,6 +36,13 @@ public class RoomBooking implements Parcelable{
         this.mHoursUsed = mHoursUsed;
     }
 
+    /** Constructor without primary key id
+     * @param mRoomId
+     * @param mStudentId
+     * @param mDate
+     * @param mStartTime
+     * @param mHoursUsed
+     */
     public RoomBooking(int mRoomId, int mStudentId, String mDate, String mStartTime, float mHoursUsed) {
         this.mRoomId = mRoomId;
         this.mStudentId = mStudentId;
@@ -37,6 +51,9 @@ public class RoomBooking implements Parcelable{
         this.mHoursUsed = mHoursUsed;
     }
 
+    /** Constructor for parcel intent
+     * @param in
+     */
     protected RoomBooking(Parcel in) {
         mId = in.readInt();
         mRoomId = in.readInt();
@@ -58,55 +75,92 @@ public class RoomBooking implements Parcelable{
         }
     };
 
-    public int getmId() {
+    /**
+     * @return
+     */
+    public int getId() {
+
         return mId;
     }
 
-    public int getmRoomId() {
+    /**
+     * @return
+     */
+    public int getRoomId() {
         return mRoomId;
     }
 
-    public void setmRoomId(int mRoomId) {
+    /**
+     * @param mRoomId
+     */
+    public void setRoomId(int mRoomId) {
         this.mRoomId = mRoomId;
     }
 
-    public int getmStudentId() {
+    /**
+     * @return
+     */
+    public int getStudentId() {
         return mStudentId;
     }
 
-    public void setmStudentId(int mStudentId) {
+    /**
+     * @param mStudentId
+     */
+    public void setStudentId(int mStudentId) {
         this.mStudentId = mStudentId;
     }
 
-    public String getmDate() {
+    /**
+     * @return
+     */
+    public String getDate() {
         return mDate;
     }
 
-    public void setmDate(String mDate) {
+    /**
+     * @param mDate
+     */
+    public void setDate(String mDate) {
         this.mDate = mDate;
     }
 
-    public String getmStartTime() {
+    /**
+     * @return
+     */
+    public String getStartTime() {
         return mStartTime;
     }
 
-    public void setmStartTime(String mStartTime) {
+    /**
+     * @param mStartTime
+     */
+    public void setStartTime(String mStartTime) {
         this.mStartTime = mStartTime;
     }
 
-    public float getmHoursUsed() {
+    /**
+     * @return
+     */
+    public float getHoursUsed() {
         return mHoursUsed;
     }
 
-    public void setmHoursUsed(int mHoursUsed) {
+    /**
+     * @return
+     */
+    public void setHoursUsed(int mHoursUsed) {
         this.mHoursUsed = mHoursUsed;
     }
 
+    /**
+     * @return
+     */
     public Date getTime()
     {
         Date date;
-        String sDate = getmDate();
-        String sTime = getmStartTime();
+        String sDate = getDate();
+        String sTime = getStartTime();
         int month = Integer.parseInt(sDate.substring(0,sDate.indexOf('/')));
         int day = Integer.parseInt(sDate.substring(sDate.indexOf('/')+ 1,sDate.lastIndexOf('/')));
 
@@ -118,6 +172,7 @@ public class RoomBooking implements Parcelable{
         return date;
     }
 
+    // Use for sending intent by Parcel
     @Override
     public int describeContents() {
         return 0;

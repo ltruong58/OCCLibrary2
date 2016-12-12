@@ -10,7 +10,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.RoomBookingDetailsActivity"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:background="@color/colorBackGround">
 
     <TextView
         android:text="@string/room_booking_details_title"
@@ -19,6 +20,8 @@
         android:id="@+id/titleTextView"
         android:layout_weight="2"
         android:textAlignment="center"
+        android:textColor="@color/title"
+        android:textStyle="normal|bold"
         android:textSize="24sp" />
 
     <TextView
@@ -37,6 +40,6 @@
         android:id="@+id/returnToMainMenuButton"
         android:onClick="returnToMainMenu"
         android:textAlignment="center"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

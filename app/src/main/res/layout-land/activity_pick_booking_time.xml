@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.PickBookingTimeActivity">
+    tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.PickBookingTimeActivity"
+    android:background="@color/colorBackGround">
 
     <TextView
         android:text="TextView"
@@ -20,6 +21,8 @@
         android:layout_weight="1"
         android:padding="3dp"
         android:textAlignment="center"
+        android:textColor="@color/title"
+        android:textStyle="normal|bold"
         android:textSize="24sp" />
 
     <LinearLayout

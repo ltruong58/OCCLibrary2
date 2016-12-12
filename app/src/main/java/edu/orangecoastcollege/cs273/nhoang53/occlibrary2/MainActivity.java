@@ -1,13 +1,10 @@
 package edu.orangecoastcollege.cs273.nhoang53.occlibrary2;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +15,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Main activity
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity
             editorSplash.putInt("splash", 0); // put it back to 0, so it will splash next time
             editorSplash.apply();
         }
-
+        db = new DBHelper(this);
         /*PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         PreferenceManager.getDefaultSharedPreferences(this).
                 registerOnSharedPreferenceChangeListener(preferenceChangeListener);*/
@@ -304,18 +303,55 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
-    /**
+    /** onClick method for Reserve Room button
+     * also check if user is not login yet or already have a upcoming room booking.
      * Long Truong
-     */
-
-    /**
-     * Letting user reserve room with PickDateActivity by use of an Intent (no data passed)
-     * @param view
      */
     public void reserveRoom(View view)
     {
-        Intent intent = new Intent(this, PickDateActivity.class);
-        startActivity(intent);
+        if(id == 0)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.not_login_click_button_error));
+            builder.setCancelable(false);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            });
+            builder.show();
+        }
+        else {
+            List<RoomBooking> allRoomBookings= db.getAllRoomBookings();
+
+            // Check if student already had a upcoming room booking
+            for(RoomBooking roomBooking : allRoomBookings)
+            {
+                Date date = Calendar.getInstance().getTime();
+                if((date.compareTo(new Date(roomBooking.getDate())) < 0) && roomBooking.getStudentId() == id)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(getString(R.string.already_reserve_room));
+                    builder.setCancelable(false);
+
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+                    builder.show();
+                    return;
+                }
+
+            }
+
+            Intent intent = new Intent(this, PickDateActivity.class);
+            startActivity(intent);
+
+        }
     }
 
     /**
