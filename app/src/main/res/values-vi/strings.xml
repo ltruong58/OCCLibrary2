@@ -37,12 +37,12 @@
     <string name="room_reserving">Đặt phòng:</string>
     <string name="sign_in">Đăng nhập:</string>
     <string name="splash">Nơi tốt để học tập</string>
-    <string name="student_activity"></string>
+    <string name="student_activity">Hoạt động sinh viên</string>
     <string name="student_id">Mã số sinh viên</string>
     <string name="student_id_null">Mã số sinh viên không được trống</string>
     <string name="student_information">Thông tin sinh viên</string>
     <string name="student_profile">Tiểu sử sinh viên</string>
-    <string name="title_activity_login2"></string>
+    <string name="title_activity_login2">Hoạt động đăng nhập</string>
     <string name="title_activity_maps">Bản đồ</string>
     <string name="title_activity_settings">Thiết lập</string>
     <string name="welcome">CHÀO MỪNG BẠN ĐẾN THƯ VIỆN OCC</string>
@@ -68,4 +68,9 @@
     <string name="submit_button">Đăng kí</string>
     <string name="title_activity_contact">Bản đồ</string>
     <string name="flashlight">Đèn pin</string>
+    <string name="cancel">Hủy bỏ</string>
+    <string name="change">Lưu thay đổi</string>
+    <string name="dates_range"></string>
+    <string name="reset">Làm lại</string>
+    <string name="title_activity_contact">Bản đồ</string>
 </resources>

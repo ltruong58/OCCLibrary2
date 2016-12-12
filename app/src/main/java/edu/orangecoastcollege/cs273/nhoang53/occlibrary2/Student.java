@@ -9,24 +9,37 @@ public class Student {
     private String mLastName;
     private String mFirstName;
     private String mPassword;
-    private int mNoShowTimes;
 
+    /**
+     * default constructor. Initial all member variable with null value.
+     */
     public Student() {    }
 
-    public Student(int mId, String mLastName, String mFirstName, String mPassword, int mNoShowTimes) {
+    /**
+     * Overloading constructor create Student with full information
+     * @param mId
+     * @param mLastName
+     * @param mFirstName
+     * @param mPassword
+     */
+    public Student(int mId, String mLastName, String mFirstName, String mPassword) {
         this.mId = mId;
         this.mLastName = mLastName;
         this.mFirstName = mFirstName;
         this.mPassword = mPassword;
-        this.mNoShowTimes = mNoShowTimes;
     }
 
-    public Student(String mLastName, String mFirstName, String mPassword, int mNoShowTimes) {
+    /**
+     * Overloading constructor with lastname, firstname, password.
+     * @param mLastName
+     * @param mFirstName
+     * @param mPassword
+     */
+    public Student(String mLastName, String mFirstName, String mPassword) {
         this.mId = -1;
         this.mLastName = mLastName;
         this.mFirstName = mFirstName;
         this.mPassword = mPassword;
-        this.mNoShowTimes = mNoShowTimes;
     }
 
     public int getId() {
@@ -45,9 +58,6 @@ public class Student {
         return mPassword;
     }
 
-    public int getNoShowTimes() {
-        return mNoShowTimes;
-    }
 
     public void setId(int mId) {
         this.mId = mId;
@@ -65,17 +75,12 @@ public class Student {
         this.mPassword = mPassword;
     }
 
-    public void setNoShowTimes(int mNoShowTimes) {
-        this.mNoShowTimes = mNoShowTimes;
-    }
-
     @Override
     public String toString(){
         return "Student{" + "Id=" + mId
                 + ", LastName= " + mLastName
                 + ", FirstName= " + mFirstName
                 + ", Password= " + mPassword
-                + ", NoShowTimes= " + mNoShowTimes
                 + " }";
     }
 }

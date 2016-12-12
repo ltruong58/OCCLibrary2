@@ -59,7 +59,6 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_FIELD_LAST_NAME = "last_name";
     private static final String KEY_FIELD_FIRST_NAME = "first_name";
     private static final String KEY_FIELD_PASSWORD = "password";
-    private static final String KEY_FIELD_NO_SHOW_TIMES = "no_show_times";
 
     /**
      * Default constructor that get Context from activity, create database name and version.
@@ -100,8 +99,7 @@ class DBHelper extends SQLiteOpenHelper {
                 + KEY_FIELD_ID + " INTEGER, "
                 + KEY_FIELD_FIRST_NAME + " TEXT, "
                 + KEY_FIELD_LAST_NAME + " TEXT, "
-                + KEY_FIELD_PASSWORD + " TEXT,"
-                + KEY_FIELD_NO_SHOW_TIMES + " INTEGER)";
+                + KEY_FIELD_PASSWORD + " TEXT)";
         sqLiteDatabase.execSQL(table);
 
         //ROOM_BOOKING
@@ -198,7 +196,7 @@ class DBHelper extends SQLiteOpenHelper {
         try{
             while((line = buffer.readLine()) != null){
                 String[] fields = line.split(",");
-                if(fields.length != 5)
+                if(fields.length != 4)
                 {
                     Log.d("OCC Library", "Skipping bad csv row: " + Arrays.toString(fields));
                     continue;
@@ -208,9 +206,8 @@ class DBHelper extends SQLiteOpenHelper {
                 String lastName = fields[1].trim();
                 String firstName = fields[2].trim();
                 String password = fields[3].trim();
-                int noShowTimes = Integer.parseInt(fields[4].trim());
 
-                addStudent(new Student(id, lastName, firstName, password, noShowTimes));
+                addStudent(new Student(id, lastName, firstName, password));
             }
         }catch (IOException e)
         {
@@ -275,7 +272,6 @@ class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_FIELD_LAST_NAME, student.getLastName());
         values.put(KEY_FIELD_FIRST_NAME, student.getFirstName());
         values.put(KEY_FIELD_PASSWORD, student.getPassword());
-        values.put(KEY_FIELD_NO_SHOW_TIMES, student.getNoShowTimes());
 
         db.insert(DATABASE_STUDENT_TABLE, null, values);
         db.close();
@@ -296,8 +292,7 @@ class DBHelper extends SQLiteOpenHelper {
                 Student student = new Student(cursor.getInt(0),
                         cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getInt(4));
+                        cursor.getString(3));
                 studentsList.add(student);
             }while (cursor.moveToNext());
         }
@@ -324,7 +319,7 @@ class DBHelper extends SQLiteOpenHelper {
     public Student getStudent(int studentId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(DATABASE_STUDENT_TABLE,
-                new String[]{KEY_FIELD_ID, KEY_FIELD_LAST_NAME, KEY_FIELD_FIRST_NAME, KEY_FIELD_PASSWORD, KEY_FIELD_NO_SHOW_TIMES},
+                new String[]{KEY_FIELD_ID, KEY_FIELD_LAST_NAME, KEY_FIELD_FIRST_NAME, KEY_FIELD_PASSWORD},
                 KEY_FIELD_ID + "=?",
                 new String[]{String.valueOf(studentId)}, null, null, null, null);
 
@@ -335,8 +330,7 @@ class DBHelper extends SQLiteOpenHelper {
             student = new Student(cursor.getInt(0),
                                 cursor.getString(1),
                                 cursor.getString(2),
-                                cursor.getString(3),
-                                cursor.getInt(4));
+                                cursor.getString(3));
         }
 
         /*Student student = null;

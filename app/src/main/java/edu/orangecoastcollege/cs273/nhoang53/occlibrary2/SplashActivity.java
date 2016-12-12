@@ -10,6 +10,11 @@ import java.util.TimerTask;
 
 public class SplashActivity extends AppCompatActivity {
 
+    /**
+     * Create SharePreferences splash
+     * It will go to MainActivity after 5 seconds
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
