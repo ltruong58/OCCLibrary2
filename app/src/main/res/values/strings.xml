@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OCC Library 2</string>
+    <string name="app_name">OCC Library</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_login2">LoginActivity2</string>
@@ -62,8 +62,8 @@
     <string name="splash">\"When I got my library card, that’s when my life began.\"\n
         – Rita Mae Brown</string>
     <string name="welcome_occ_library">Welcome to \nOCC library</string>
-    <string name="author" translatable="false">Designed by: \t
-                        Long Truong\n
+    <string name="author" translatable="false">Designed by: \t\n
+                        Long Truong \n
                         Nguyen Hoang </string>
 
     <!-- Contact activity -->

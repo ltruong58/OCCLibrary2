@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.StudentProfileActivity"
     android:orientation="vertical"
-    android:background="@android:color/background_light"
+    android:background="@color/colorBackGround"
     android:weightSum="10"
     android:focusableInTouchMode="true">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/empty_background"
         android:layout_weight="0.5"
         android:layout_height="0dp">
 
@@ -22,11 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/textView8"
-            android:textColor="@color/colorLoginSuccess"
-            android:textSize="14sp"
+            android:textColor="@color/colorType"
+            android:textSize="18sp"
             android:fontFamily="serif"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
             android:textStyle="normal|bold" />
     </LinearLayout>
 
@@ -99,7 +98,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/empty_background"
         android:layout_marginTop="15dp"
         android:layout_height="0dp"
         android:layout_weight="0.5">
@@ -110,11 +109,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView17"
             android:textStyle="normal|bold"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:fontFamily="serif"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/colorLoginSuccess" />
+            android:textColor="@color/colorType" />
     </LinearLayout>
 
     <RelativeLayout
@@ -195,7 +193,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/empty_background"
         android:layout_marginTop="15dp"
         android:layout_height="0dp"
         android:layout_weight="0.5">
@@ -206,11 +204,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView18"
             android:textStyle="normal|bold"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:fontFamily="serif"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/colorLoginSuccess" />
+            android:textColor="@color/colorType" />
     </LinearLayout>
 
     <RelativeLayout

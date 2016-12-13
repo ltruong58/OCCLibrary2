@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="edu.orangecoastcollege.cs273.nhoang53.occlibrary2.MainActivity"
     android:orientation="vertical"
-    android:background="@color/colorLogin"
+    android:background="@color/colorBackGround"
     android:weightSum="10">
 
     <ImageView
